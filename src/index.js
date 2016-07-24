@@ -150,7 +150,7 @@ class PokemonGOAPI {
       message: {
         encounter_id: pokemon.encounter_id,
         pokeball: 1,
-        normalized_reticle_size: 1.95,
+        normalized_reticle_size: 1.950,
         spawn_point_guid: pokemon.spawn_point_id,
         hit_pokemon: true,
         spin_modifier: spin_modifier,
