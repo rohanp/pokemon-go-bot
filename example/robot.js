@@ -1,18 +1,24 @@
-import PokeAPI from '../lib'
+import env from 'node-env-file'
+import PokeAPI from '../src'
+env(__dirname + '/.env');
+
+
+var username = process.env.PGO_USERNAME || 'USER'
+var password = process.env.PGO_PASSWORD || 'PASS'
+var provider = process.env.PGO_PROVIDER || 'ptc'
+var latitude = process.env.PGO_LATITUDE || 40.759211
+var longitude = process.env.PGO_LONGITUDE || -73.984472
 
 //Set environment variables or replace placeholder text
 var location = {
     type: 'coords',
     coords: {
-      latitude: 59.236641,
-      longitude: 17.954995,
-      altitude: 0,
+      latitude: 55.732112,
+      longitude: 12.580053,
+      altitude: 20,
     }
 };
 
-var username = process.env.PGO_USERNAME || 'USER'
-var password = process.env.PGO_PASSWORD || 'PASS'
-var provider = process.env.PGO_PROVIDER || 'ptc'
 
 const Poke = new PokeAPI()
 
@@ -25,27 +31,35 @@ async function init() {
   let player = await Poke.GetPlayer()
 
   // get map objects..
-  let cells = await Poke.GetMapObjects()
+  while( true ){
+    let cells = await Poke.GetMapObjects()
+    for(let cell of cells) {
+      // catchable pokemons from here?
+      if (cell.catchable_pokemons.length > 0){
+        for (var pokemon of cell.catchable_pokemons) {
+          // we have wild pokemons
+          let encounterResult = await Poke.EncounterPokemon(pokemon);
+          console.log(encounterResult)
+          throw new Error('encounter..')
+        }
+      }
 
-  for(let cell of cells) {
+      // wild pokemons
+      if (cell.wild_pokemons.length > 0){
+        // we have wild pokemons
+        console.log(cell)
+      }
 
-    // catchable pokemons from here?
-    if (cell.catchable_pokemons.length > 0){
-      // we have wild pokemons
+      // forts
+      if (cell.forts.length > 0){
+        // we have wild pokemons
+      }
+
+      //Done...
+      //TODO: We need to move.. like a human..!
     }
-
-    // wild pokemons
-    if (cell.wild_pokemons.length > 0){
-      // we have wild pokemons
-    }
-
-    // forts
-    if (cell.forts.length > 0){
-      // we have wild pokemons
-    }
-
-    //Done...
-    //TODO: We need to move.. like a human..!
+    await Poke.player.walkAround()
+    await new Promise(resolve => setTimeout(resolve, 3000))
   }
 }
 
