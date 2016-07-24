@@ -13,8 +13,8 @@ var longitude = process.env.PGO_LONGITUDE || -73.984472
 var location = {
     type: 'coords',
     coords: {
-      latitude: 55.732112,
-      longitude: 12.580053,
+      latitude: 40.759211,
+      longitude: -73.984472,
       altitude: 20,
     }
 };
@@ -36,12 +36,7 @@ async function init() {
     for(let cell of cells) {
       // catchable pokemons from here?
       if (cell.catchable_pokemons.length > 0){
-        for (var pokemon of cell.catchable_pokemons) {
-          // we have wild pokemons
-          let encounterResult = await Poke.EncounterPokemon(pokemon);
-          console.log(encounterResult)
-          throw new Error('encounter..')
-        }
+        // we have catchable_pokemons pokemons
       }
 
       // wild pokemons
@@ -52,7 +47,7 @@ async function init() {
 
       // forts
       if (cell.forts.length > 0){
-        // we have wild pokemons
+        // we have forts pokemons
       }
 
       //Done...
