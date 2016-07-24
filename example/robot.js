@@ -36,13 +36,13 @@ async function init() {
     for(let cell of cells) {
       // catchable pokemons from here?
       if (cell.catchable_pokemons.length > 0){
-        for (var pokemon of cell.catchable_pokemons) {
-          // we have wild pokemons
-          let encounterResult = await Poke.EncounterPokemon(pokemon);
-          let getPokemon = await Poke.CatchPokemon(pokemon)
+        cell.catchable_pokemons.map(pokemon => {
+          let encounterResult = Poke.EncounterPokemon(pokemon);
+          console.log(encounterResult)
+          let getPokemon =  Poke.CatchPokemon(pokemon)
           console.log(getPokemon)
-          throw new Error('got him..')
-        }
+
+        })
       }
 
       // wild pokemons
