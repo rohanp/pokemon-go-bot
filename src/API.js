@@ -21,7 +21,7 @@ class Connection {
   }
 
   async Request(requests, userObj){
-    let res = await this._request(requests,userObj)
+    let res = await this._request(requests, userObj)
     //we have response (returns = response we want.. now lets parse it)
     var respt = {}
     requests.map( (req,key) => {
@@ -41,7 +41,7 @@ class Connection {
     return respt
   }
 
-  async _request(reqs,userObj) {
+  async _request(reqs, userObj) {
 
     if (this.endPoint.length < 5 || !this.endPoint)
       throw new Error('[!] No endPoint set!')

@@ -13,21 +13,19 @@ var latitude = process.env.PGO_LATITUDE || 40.759211
 var longitude = process.env.PGO_LONGITUDE || -73.984472
 
 //Set environment variables or replace placeholder text
-var location = {
-    type: 'coords',
-    coords: {
-      latitude: 55.70000932453345,
-      longitude: 12.524757385253906,
-      altitude: 20,
-    }
-};
 
 const Poke = new PokeAPI()
 
 async function init() {
   //yep, we do need to login..
 
-  const api = await Poke.login(username, password, location, provider)
+  Poke.player.location = {
+    latitude: 55.70000932453345,
+    longitude: 12.524757385253906,
+  }
+
+  const api = await Poke.login(username, password, provider)
+
 
   // just update the profile...
   let player = await Poke.GetPlayer()

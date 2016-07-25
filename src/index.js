@@ -28,7 +28,7 @@ class PokemonGOAPI {
     this.useHartBeat = false
   }
 
-  async login(username, password, location, provider) {
+  async login(username, password, provider) {
 
     if (provider !== 'ptc' && provider !== 'google') {
       throw new Error('Invalid provider')
@@ -36,7 +36,6 @@ class PokemonGOAPI {
 
     this.player.provider = provider
 
-    await this.player.setLocation(location)
     await this.player.Login(username, password)
     await this.api.setEndpoint(this.player.playerInfo)
 
