@@ -19,8 +19,8 @@ class Fort {
         fort_id: this.id,
         player_latitude: this.parent.player.playerInfo.latitude,
         player_longitude: this.parent.player.playerInfo.longitude,
-        fort_latitude: this.fort.fort_latitude,
-        fort_longitude: this.fort.fort_longitude
+        fort_latitude: this.latitude,
+        fort_longitude: this.longitude
       }
     }])
   }
