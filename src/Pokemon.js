@@ -20,7 +20,7 @@ class Pokemon{
   }
 
   async encounter() {
-    this.isCatching=true
+    this.isCatching = true
     var res = await this.parent.Call([{
       request: 'ENCOUNTER',
       message: {
@@ -65,8 +65,8 @@ class Pokemon{
   release() {
     return this.parent.Call([{
       request: 'RELEASE_POKEMON',
-      message: { 
-        pokemon_id: this.pokemon_id 
+      message: {
+        pokemon_id: this.pokemon_id
       }
     }])
   }

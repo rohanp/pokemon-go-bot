@@ -7,28 +7,9 @@ function mandatory() {
     throw new Error('Missing parameter');
 }
 
-
-class Fort{
+class Fort {
   constructor(props, parent) {
-    Object.assign(this, props)
-    delete this.id
-    this.parent = parent
-  }
-
-  isCheckpoint(){
-    if (this.type == 1){
-      return true
-    }else{
-      return false
-    }
-  }
-
-  isGym(){
-    if (this.type == 0){
-      return true
-    }else{
-      return false
-    }
+    Object.defineProperty(this, 'parent', {value: parent})
   }
 
   search() {
@@ -44,6 +25,7 @@ class Fort{
     }])
   }
 
+  // TODO should only be in Gym class?
   recallPokemon(pokemon) {
     return this.parent.Call([{
       request: 'FORT_RECALL_POKEMON',
@@ -56,6 +38,7 @@ class Fort{
     }])
   }
 
+  // TODO should only be in Gym class?
   deployPokemon(pokemon) {
     return this.parent.Call([{
       request: 'FORT_DEPLOY_POKEMON',
@@ -78,6 +61,7 @@ class Fort{
       }
     }])
   }
+
   addModifier(item_id){
     return this.parent.Call([{
       request: 'FORT_DETAILS',
@@ -88,9 +72,41 @@ class Fort{
         player_longitude: this.parent.player.playerInfo.longitude,
       }
     }])
-
   }
 
 }
-export default Fort
 
+
+class Gym extends Fort {
+  constructor(props, parent) {
+    super(props, parent)
+
+    Object.assign(this, props)
+    delete this.type
+    delete this.lure_info
+    this.isGym = true
+  }
+}
+
+class Checkpoint extends Fort {
+  constructor(props, parent) {
+    super(props, parent)
+    Object.assign(this, props)
+    this.isCheckpoint = true
+    delete this.type
+    delete this.owned_by_team
+    delete this.guard_pokemon_id
+    delete this.guard_pokemon_cp
+    delete this.gym_points
+    delete this.is_in_battle
+    delete this.sponsor
+    delete this.rendering_type
+  }
+}
+
+export default (fort, parent) => {
+  switch (fort.type) {
+    case 0: return new Gym(fort, parent); break
+    case 1: return new Checkpoint(fort, parent); break
+  }
+}

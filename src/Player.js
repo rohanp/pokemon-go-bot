@@ -84,12 +84,12 @@ class Player {
     return this.playerInfo
   }
 
-  teleport(lat,long,alt){
+  teleport(lat, long, alt){
     this.playerInfo.latitude = lat
-    this.playerInfo.longitude = long  
-    this.playerInfo.altitude = alt  
+    this.playerInfo.longitude = long
+    this.playerInfo.altitude = alt
   }
-  
+
   walkAround(){
     let latMorP = Math.random() < 0.5 ? -1 : 1
     let latRand = ((Math.floor((Math.random() * 13) + 1))/100000)*latMorP
@@ -98,28 +98,28 @@ class Player {
 
     var dist = geolib.getDistance(
         {latitude: this.playerInfo.latitude, longitude: this.playerInfo.longitude},
-        {latitude: (this.playerInfo.latitude+latRand), longitude: (this.playerInfo.longitude+longRand)}
+        {latitude: this.playerInfo.latitude + latRand, longitude: this.playerInfo.longitude + longRand}
     )
 
-    this.playerInfo.latitude = this.playerInfo.latitude+latRand
-    this.playerInfo.longitude = this.playerInfo.longitude+longRand  
-    console.log('[i] We just walked ' + dist+' meters')
+    this.playerInfo.latitude += latRand
+    this.playerInfo.longitude += longRand
+
+    console.log(`[i] We just walked ${dist} meters`)
   }
 
-  
-  async walkToPoint(lat,long){
 
+  async walkToPoint(lat, long){
     let latMorP = Math.random() < 0.5 ? -1 : 1
     let latRand = ((Math.floor((Math.random() * 13) + 1))/100000)*latMorP
     latMorP = Math.random() < 0.5 ? -1 : 1
     let longRand = ((Math.floor((Math.random() * 13) + 1))/100000)*latMorP
 
-    if (this.playerInfo.latitude > lat) 
+    if (this.playerInfo.latitude > lat)
       this.playerInfo.latitude = this.playerInfo.latitude-latRand
     else
       this.playerInfo.latitude = this.playerInfo.latitude+latRand
 
-    if (this.playerInfo.longitude > lat) 
+    if (this.playerInfo.longitude > lat)
       this.playerInfo.longitude = this.playerInfo.longitude-longRand
     else
       this.playerInfo.longitude = this.playerInfo.longitude+longRand
@@ -131,7 +131,7 @@ class Player {
     //distance less than 10 meters?
     if (distance <= 10){
       return true
-    }else{
+    } else {
       this.walkToPoint(lat,long)
     }
   }
@@ -144,7 +144,7 @@ class Player {
 
       // use google map search by name
       if (location.type === 'name') {
-        if (!location.name) 
+        if (!location.name)
           throw new Error('You should add a location name')
 
         const locationName = location.name;
