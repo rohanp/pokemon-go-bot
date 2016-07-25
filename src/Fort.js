@@ -10,6 +10,7 @@ function mandatory() {
 
 class Fort {
   constructor(props, parent) {
+    Object.assign(this, props)
     Object.defineProperty(this, 'parent', {value: parent})
   }
 
@@ -23,6 +24,8 @@ class Fort {
     return { latitude, longitude }
   }
 
+
+
   /**
    * Return the distance in meters from players location
    * to the Checkpoint or Gym`s location
@@ -32,6 +35,8 @@ class Fort {
   get distance() {
     return geolib.getDistance(this.location, this.parent.player.location)
   }
+
+
 
   /**
    * TODO: description
@@ -79,11 +84,12 @@ class Gym extends Fort {
   constructor(props, parent) {
     super(props, parent)
 
-    Object.assign(this, props)
     delete this.type
     delete this.lure_info
     this.isGym = true
   }
+
+
 
   /**
    * TODO: description
@@ -130,10 +136,14 @@ class Gym extends Fort {
   }
 }
 
+
+/**
+ * Checkpoint is a "pokestop" where you can
+ * get items from it by spining.
+ */
 class Checkpoint extends Fort {
   constructor(props, parent) {
     super(props, parent)
-    Object.assign(this, props)
     this.isCheckpoint = true
     delete this.type
     delete this.owned_by_team
@@ -144,6 +154,8 @@ class Checkpoint extends Fort {
     delete this.sponsor
     delete this.rendering_type
   }
+
+
 
   /**
    * search spins the pokestop
