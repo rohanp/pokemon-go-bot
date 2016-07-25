@@ -43,10 +43,11 @@ async function init() {
 
       // forts
       for (let fort of cell.forts) {
+
         // Only do things close to you
-        if(fort.distance < 10){
+        if(fort.distance < 50){
           // Collect pokestop rewards
-          if (fort.isCheckpoint) {
+          if (fort.isCheckpoint && !fort.cooldown) {
             let res = await fort.search()
             console.log(res.FortSearchResponse)
           }
