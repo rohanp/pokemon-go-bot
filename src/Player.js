@@ -108,27 +108,39 @@ class Player {
 
 
   async walkToPoint(lat, long){
-    let random = getRandomDirection()
+    let stepSize = 12 // meters
 
     let destination = {
-      latitude: this.location.latitude > lat
-        ? this.playerInfo.latitude -= random.latitude
-        : this.playerInfo.latitude += random.latitude,
-
-      longitude: this.location.longitude > lat
-        ? this.playerInfo.longitude -= random.latitude
-        : this.playerInfo.longitude += random.latitude
+      latitude: lat,
+      longitude: long
     }
 
+    var difference = {
+                        latitude: destination.latitude - this.location.latitude,
+                        longitude: destination.longitude - this.location.longitude
+                    }
+
     var distance = geolib.getDistance(this.location, destination)
+
+    difference.latitude *= stepSize / distance
+    difference.longitude *= stepSize / distance
+
+
+    var newLocation = {
+                    latitude: this.location.latitude + difference.latitude,
+                    longitude: this.location.longitude + difference.longitude
+                }
 
     //distance less than 10 meters?
     if (distance <= 10){
       return true
     } else {
+
+      console.log(`[i] Walking closer to [`+lat+`,`+long+`] - distance is: ${distance} meters`)
+      await new Promise(resolve => setTimeout(resolve, 2000))
+      this.location  = newLocation
       this.walkToPoint(lat, long)
-      console.log(`[i] Walking closer to [`+lat+`,`+lng+`] - distance is: ${distance} meters`)
-      await new Promise(resolve => setTimeout(resolve, 2700))
+
     }
   }
 
