@@ -33,7 +33,7 @@ async function init() {
 
       // catchable pokemons from here?
       for (let pokemon of cell.catchable_pokemons) {
-        // pokemon.encounterAndCatch()
+        // await pokemon.encounterAndCatch().catch(err => console.log(err))
       }
 
       // wild pokemons
@@ -45,7 +45,7 @@ async function init() {
       for (let fort of cell.forts) {
 
         // Only do things close to you
-        if(fort.distance < 50){
+        if(fort.distance < 40){
           // Collect pokestop rewards
           if (fort.isCheckpoint && !fort.cooldown) {
             let res = await fort.search()
