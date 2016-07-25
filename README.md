@@ -3,8 +3,8 @@ Pokemon Go API for nodejs
 
 
 Query the Pokemon database for what you want..
-This library covers all functions available in the api throu `Call()`
-We are also working now to port all calls into functions,
+This library covers all functions available in the api through `Call()`
+We are also working on porting all calls into functions,
 
 ## Install
 ```
@@ -50,7 +50,7 @@ See /example folder
   sessionData
 }
 ```
-#### available functions
+#### Available functions
 ```
 player.provider()
 player.profileDetails()
@@ -112,7 +112,7 @@ player.remoteConfigVersion()
   from_fort
 }
 ```
-#### available functions
+#### Available functions
 ```
 pokemon.encounter()
 pokemon.catch()
@@ -142,7 +142,7 @@ pokemon.nickname()
   modifiers
 }
 ```
-#### available functions
+#### Available functions
 ```
 fort.isCheckpoint
 fort.isGym
