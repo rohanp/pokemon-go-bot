@@ -23,55 +23,15 @@ class Fort {
     return { latitude, longitude }
   }
 
-
-
   /**
-   * TODO: description
-   * TODO should only be in Gym class?
+   * Return the distance in meters from players location
+   * to the Checkpoint or Gym`s location
    *
-   * [recallPokemon description]
-   * @param  {[type]} pokemon [description]
-   * @return {[type]}         [description]
+   * @return {Number} meters
    */
-  recallPokemon(pokemon) {
-    let {latitude, longitude} = this.parent.player.location
-
-    return this.parent.Call([{
-      request: 'FORT_RECALL_POKEMON',
-      message: {
-        fort_id: this.id,
-        pokemon_id: pokemon.pokemon_id,
-        player_latitude: latitude,
-        player_longitude: longitude
-      }
-    }])
+  get distance() {
+    return geolib.getDistance(this.location, this.parent.player.location)
   }
-
-
-
-  /**
-   * TODO: description
-   * TODO should only be in Gym class?
-   *
-   * [deployPokemon description]
-   * @param  {[type]} pokemon [description]
-   * @return {[type]}         [description]
-   */
-  deployPokemon(pokemon) {
-    let {latitude, longitude} = this.parent.player.location
-
-    return this.parent.Call([{
-      request: 'FORT_DEPLOY_POKEMON',
-      message: {
-        fort_id: this.id,
-        pokemon_id: pokemon.pokemon_id,
-        player_latitude: latitude,
-        player_longitude: longitude
-      }
-    }])
-  }
-
-
 
   /**
    * TODO: description
@@ -125,15 +85,48 @@ class Gym extends Fort {
     this.isGym = true
   }
 
+  /**
+   * TODO: description
+   *
+   * [recallPokemon description]
+   * @param  {[type]} pokemon [description]
+   * @return {[type]}         [description]
+   */
+  recallPokemon(pokemon) {
+    let {latitude, longitude} = this.parent.player.location
+
+    return this.parent.Call([{
+      request: 'FORT_RECALL_POKEMON',
+      message: {
+        fort_id: this.id,
+        pokemon_id: pokemon.pokemon_id,
+        player_latitude: latitude,
+        player_longitude: longitude
+      }
+    }])
+  }
+
+
 
   /**
-   * Return the distance in meters from players location
-   * to the Checkpoint's location
+   * TODO: description
    *
-   * @return {Number} meters
+   * [deployPokemon description]
+   * @param  {[type]} pokemon [description]
+   * @return {[type]}         [description]
    */
-  get distance() {
-    return geolib.getDistance(this.location, this.parent.player.location)
+  deployPokemon(pokemon) {
+    let {latitude, longitude} = this.parent.player.location
+
+    return this.parent.Call([{
+      request: 'FORT_DEPLOY_POKEMON',
+      message: {
+        fort_id: this.id,
+        pokemon_id: pokemon.pokemon_id,
+        player_latitude: latitude,
+        player_longitude: longitude
+      }
+    }])
   }
 }
 
@@ -151,20 +144,6 @@ class Checkpoint extends Fort {
     delete this.sponsor
     delete this.rendering_type
   }
-
-
-
-  /**
-   * Return the distance in meters from players location
-   * to the Checkpoint's location
-   *
-   * @return {Number} meters
-   */
-  get distance() {
-    return geolib.getDistance(this.location, this.parent.player.location)
-  }
-
-
 
   /**
    * search spins the pokestop
