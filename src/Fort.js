@@ -32,7 +32,7 @@ class Fort{
   }
 
   search() {
-    return this.Call([{
+    return this.parent.Call([{
       request: 'FORT_SEARCH',
       message: {
         fort_id: this.fort.fort_id,
@@ -45,7 +45,7 @@ class Fort{
   }
 
   recallPokemon(pokemon_id = mandatory()) {
-    return this.Call([{
+    return this.parent.Call([{
       request: 'FORT_RECALL_POKEMON',
       message: {
         fort_id: this.fort_id,
@@ -57,7 +57,7 @@ class Fort{
   }
 
   deployPokemon(pokemon_id = mandatory()) {
-    return this.Call([{
+    return this.parent.Call([{
       request: 'FORT_DEPLOY_POKEMON',
       message: {
         fort_id: this.fort_id,
@@ -69,7 +69,7 @@ class Fort{
   }
 
   details() {
-    return this.Call([{
+    return this.parent.Call([{
       request: 'FORT_DETAILS',
       message: {
         fort_id: this.fort.fort_id,
@@ -79,7 +79,7 @@ class Fort{
     }])
   }
   addModifier(item_id){
-    return this.Call([{
+    return this.parent.Call([{
       request: 'FORT_DETAILS',
       message: {
         modifier_type: item_id,
