@@ -50,7 +50,12 @@ class PokemonGOAPI {
   }
 
   GetInventory() {
-    return this.Call([{ request: 'GET_INVENTORY' }])
+    return this.Call([{ 
+      request: 'GET_INVENTORY',
+      message: {
+        last_timestamp_ms: 0
+      }
+    }])
   }
 
   async GetPlayer() {
