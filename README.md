@@ -36,6 +36,45 @@ See /example folder
 
 
 
+## Player Object
+```
+{
+  accessToken
+  username
+  password
+  debug
+  latitude
+  longitude
+  altitude
+  provider
+  sessionData
+}
+```
+#### available functions
+```
+player.provider()
+player.profileDetails()
+player.location()
+player.location()
+player.profile()
+player.createdDate()
+player.pokeStorage()
+player.itemsStorage()
+player.currency()
+player.Login()
+player.walkAround()
+player.walkToPoint()
+player.hatchedEggs()
+player.levelUpRewards()
+player.checkAwardBadges()
+player.collectDailyBonus()
+player.collectDailyBonus()
+player.settings()
+player.itemTemplates()
+player.remoteConfigVersion()
+player.remoteConfigVersion()
+```
+
 ## Available functions (more to come)
 
 ## Pokemon object
@@ -113,6 +152,7 @@ fort.deployPokemon(Pokemon Object)
 fort.details()
 fort.addModifier()
 ```
+
 
 
 ## Poke.GetPlayer()

@@ -131,6 +131,14 @@ class Player {
   }
 
 
+  hatchedEggs() {
+    return this.parent.Call([{
+      request: 'GET_HATCHED_EGGS',
+    }])
+  }
+
+
+
   settings() {
     return this.parent.Call([{
       request: 'DOWNLOAD_SETTINGS',
