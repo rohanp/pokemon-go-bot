@@ -36,8 +36,8 @@ class Fort{
       request: 'FORT_SEARCH',
       message: {
         fort_id: this.fort.fort_id,
-        player_latitude: this.player.playerInfo.latitude,
-        player_longitude: this.player.playerInfo.longitude,
+        player_latitude: this.parent.player.playerInfo.latitude,
+        player_longitude: this.parent.player.playerInfo.longitude,
         fort_latitude: this.fort.fort_latitude,
         fort_longitude: this.fort.fort_longitude
       }
