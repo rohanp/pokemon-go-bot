@@ -76,6 +76,44 @@ class Pokemon{
     }])
   }
 
+  envolve() {
+    return this.parent.Call([{
+      request: 'EVOLVE_POKEMON',
+      message: {
+        pokemon_id: this.pokemon_id
+      }
+    }])
+  }
+
+  upgrade() {
+    return this.parent.Call([{
+      request: 'UPGRADE_POKEMON',
+      message: {
+        pokemon_id: this.pokemon_id
+      }
+    }])
+  }
+
+  setFavorite() {
+    return this.parent.Call([{
+      request: 'SET_FAVORITE_POKEMON',
+      message: {
+        pokemon_id: this.pokemon_id
+        is_favorite: true,
+      }
+    }])
+  }
+
+  nickname(name) {
+    return this.parent.Call([{
+      request: 'NICKNAME_POKEMON',
+      message: {
+        pokemon_id: this.pokemon_id
+        nickname: name,
+      }
+    }])
+  }
+
 
 }
 export default Pokemon

@@ -79,6 +79,10 @@ pokemon.encounter()
 pokemon.catch()
 pokemon.encounterAndCatch()
 pokemon.release()
+pokemon.envolve()
+pokemon.upgrade()
+pokemon.setFavorite()
+pokemon.nickname()
 ```
 
 ## Fort object (Checkpoint and Gym)
