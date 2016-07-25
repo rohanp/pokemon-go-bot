@@ -101,8 +101,8 @@ pokemon.release()
 ```
 #### available functions
 ```
-fort.isCheckpoint()
-fort.isGym()
+fort.isCheckpoint
+fort.isGym
 fort.search()
 fort.recallPokemon(Pokemon Object)
 fort.deployPokemon(Pokemon Object)
