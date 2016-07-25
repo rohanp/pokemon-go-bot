@@ -33,8 +33,6 @@ class Connection {
         respt[ResponseType] = Responses[ResponseType].decode(res.returns[key])
         console.log('[i] Received OK: '+ResponseType)
       } catch(error) {
-        console.log(error)
-        console.log(res)
         console.log('[!] Response error!')
         throw new Error('Response error!')
       }

@@ -16,8 +16,8 @@ var longitude = process.env.PGO_LONGITUDE || -73.984472
 var location = {
     type: 'coords',
     coords: {
-      latitude: 55.700710651590725,
-      longitude: 12.531623840332031,
+      latitude: 55.70000932453345,
+      longitude: 12.524757385253906,
       altitude: 20,
     }
 };
@@ -39,18 +39,13 @@ async function init() {
       // catchable pokemons from here?
       if (cell.catchable_pokemons.length > 0){
         cell.catchable_pokemons.map(pokemon => {
-          let encounterResult = Poke.EncounterPokemon(pokemon);
-          console.log(encounterResult)
-          let getPokemon =  Poke.CatchPokemon(pokemon)
-          console.log(getPokemon)
-
+          pokemon.encounterAndCatch()
         })
       }
 
       // wild pokemons
       if (cell.wild_pokemons.length > 0){
         // we have wild pokemons
-        console.log(cell)
       }
 
       // forts

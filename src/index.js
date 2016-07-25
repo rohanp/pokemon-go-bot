@@ -6,6 +6,8 @@ import {
   BANNED_POKEMONS
 } from './settings'
 
+import rand from 'randgen'
+
 /**
  * Called if a parameter is missing and
  * the default value is evaluated.
@@ -89,63 +91,16 @@ class PokemonGOAPI {
 
     for(let cell of cells) {
       cell.catchable_pokemons = cell.catchable_pokemons.map(pokemon =>
-        new Pokemon(pokemon)
+        new Pokemon(pokemon, this)
       )
     }
 
     return cells
   }
 
-  FortRecallPokemon(fort_id, pokemon_id = mandatory()) {
-    return this.Call([{
-      request: 'FORT_RECALL_POKEMON',
-      message: {
-        fort_id: fort_id,
-        pokemon_id: pokemon_id,
-        player_latitude: this.player.playerInfo.latitude,
-        player_longitude: this.player.playerInfo.longitude,
-      }
-    }])
-  }
-
-  FortDeployPokemon(fort_id, pokemon_id = mandatory()) {
-    return this.Call([{
-      request: 'FORT_DEPLOY_POKEMON',
-      message: {
-        fort_id: fort_id,
-        pokemon_id: pokemon_id,
-        player_latitude: this.player.playerInfo.latitude,
-        player_longitude: this.player.playerInfo.longitude,
-      }
-    }])
-  }
-
-  FortDetails(fort = mandatory()) {
-    return this.Call([{
-      request: 'FORT_DETAILS',
-      message: {
-        fort_id: fort.fort_id,
-        latitude: fort.latitude,
-        longitude: fort.longitude,
-      }
-    }])
-  }
-
-  FortSearch(fort = mandatory()) {
-
-    return this.Call([{
-      request: 'FORT_SEARCH',
-      message: {
-        fort_id: fort.fort_id,
-        player_latitude: this.player.playerInfo.latitude,
-        player_longitude: this.player.playerInfo.longitude,
-        fort_latitude: fort.fort_latitude,
-        fort_longitude: fort.fort_longitude
-      }
-    }])
-  }
-
   EncounterPokemon(pokemon = mandatory()) {
+    this.isCatching=true
+    console.log('[warning] this is deprecated, use pokemon.Encounter()')
     return this.Call([{
       request: 'ENCOUNTER',
       message: {
@@ -158,7 +113,8 @@ class PokemonGOAPI {
   }
 
   CatchPokemon(pokemon = mandatory()) {
-    return this.Call([{
+    console.log('[warning] this is deprecated, use pokemon.Catch()')
+    var res = this.Call([{
       request: 'CATCH_POKEMON',
       message: {
         encounter_id: pokemon.encounter_id,
@@ -166,28 +122,13 @@ class PokemonGOAPI {
         normalized_reticle_size: Math.min(1.95, rand.rnorm(1.9, 0.05)),
         spawn_point_guid: pokemon.spawn_point_id,
         hit_pokemon: true,
-        spin_modifier: Math.min(0.95, rand.rnorm(0.85, 0.1),
+        spin_modifier: Math.min(0.95, rand.rnorm(0.85, 0.1)),
         normalized_hit_position: 1.0,
       }
     }])
-  }
-
-  async EncounterAndCatchPokemon(pokemon = mandatory()){
-    this.isCatching=true
-    var pok = await this.EncounterPokemon(pokemon)
-    setTimeout(resolve, (Math.floor((Math.random() * 2) + 1))
-    pok = await CatchPokemon(pok)
     this.isCatching=false
-    return pok
+    return res
   }
-
-  ReleasePokemon(pokemon_id = mandatory()) {
-    return this.Call([{
-      request: 'RELEASE_POKEMON',
-      message: { pokemon_id }
-    }])
-  }
-
   UseItemPotion(item_id, pokemon_id = mandatory()) {
     return this.Call([{
       request: 'USE_ITEM_POTION',
