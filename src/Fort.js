@@ -1,3 +1,4 @@
+import geolib from 'geolib'
 
 /**
  * Called if a parameter is missing and
@@ -13,29 +14,13 @@ class Fort {
   }
 
 
-
   /**
-   * TODO: description
-   * is this when you search pokestop and
-   * get pokeball among other things?
-   * Then this should only be in the Checkpoint class...?
-   *
-   * [search description]
-   * @return {[type]} [description]
+   * Return the coordinates of the fort
+   * @return {Object} {latitude, longitude}
    */
-  search() {
-    let {latitude, longitude} = this.parent.player.location
-
-    return this.parent.Call([{
-      request: 'FORT_SEARCH',
-      message: {
-        fort_id: this.id,
-        player_latitude: latitude,
-        player_longitude: longitude,
-        fort_latitude: this.latitude,
-        fort_longitude: this.longitude
-      }
-    }])
+  get location() {
+    let { latitude, longitude } = this
+    return { latitude, longitude }
   }
 
 
@@ -139,6 +124,17 @@ class Gym extends Fort {
     delete this.lure_info
     this.isGym = true
   }
+
+
+  /**
+   * Return the distance in meters from players location
+   * to the Checkpoint's location
+   *
+   * @return {Number} meters
+   */
+  get distance() {
+    return geolib.getDistance(this.location, this.parent.player.location)
+  }
 }
 
 class Checkpoint extends Fort {
@@ -154,6 +150,41 @@ class Checkpoint extends Fort {
     delete this.is_in_battle
     delete this.sponsor
     delete this.rendering_type
+  }
+
+
+
+  /**
+   * Return the distance in meters from players location
+   * to the Checkpoint's location
+   *
+   * @return {Number} meters
+   */
+  get distance() {
+    return geolib.getDistance(this.location, this.parent.player.location)
+  }
+
+
+
+  /**
+   * search spins the pokestop
+   * you get pokemon balls among other things
+   *
+   * @return {[type]} [description]
+   */
+  search() {
+    let {latitude, longitude} = this.parent.player.location
+
+    return this.parent.Call([{
+      request: 'FORT_SEARCH',
+      message: {
+        fort_id: this.id,
+        player_latitude: latitude,
+        player_longitude: longitude,
+        fort_latitude: this.latitude,
+        fort_longitude: this.longitude
+      }
+    }])
   }
 }
 
