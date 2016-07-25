@@ -1,7 +1,7 @@
 import GeoCoder from 'geocoder'
 import moment from 'moment'
 import Auth from '~/Auth'
-
+import geolib from 'geolib'
 
 class Player {
   constructor(props) {
@@ -96,8 +96,14 @@ class Player {
     latMorP = Math.random() < 0.5 ? -1 : 1
     let longRand = ((Math.floor((Math.random() * 13) + 1))/100000)*latMorP
 
+    var dist = geolib.getDistance(
+        {latitude: this.playerInfo.latitude, longitude: this.playerInfo.longitude},
+        {latitude: (this.playerInfo.latitude+latRand), longitude: (this.playerInfo.longitude+longRand)}
+    )
+
     this.playerInfo.latitude = this.playerInfo.latitude+latRand
     this.playerInfo.longitude = this.playerInfo.longitude+longRand  
+    console.log('[i] We just walked ' + dist+' meters')
   }
 
   
@@ -120,7 +126,7 @@ class Player {
 
     var distance = geolib.getDistance(
         {latitude: this.playerInfo.longitude, longitude: this.playerInfo.longitude},
-        {latitude: lat, long}
+        {latitude: lat, longitude: long}
     )
     //distance less than 10 meters?
     if (distance <= 10){

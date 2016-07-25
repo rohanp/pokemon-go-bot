@@ -2,6 +2,9 @@ import Player from '~/Player'
 import API from '~/API'
 import Pokemon from '~/Pokemon'
 import PlayerMap from '~/PlayerMap'
+import {
+  BANNED_POKEMONS
+} from './settings'
 
 /**
  * Called if a parameter is missing and
@@ -142,23 +145,6 @@ class PokemonGOAPI {
     }])
   }
 
-  CatchPokemon(pokemon = mandatory()) {
-    var spin_modifier = 0.85 + Math.random() * 0.15
-
-    return this.Call([{
-      request: 'CATCH_POKEMON',
-      message: {
-        encounter_id: pokemon.encounter_id,
-        pokeball: 1,
-        normalized_reticle_size: 1.950,
-        spawn_point_guid: pokemon.spawn_point_id,
-        hit_pokemon: true,
-        spin_modifier: spin_modifier,
-        normalized_hit_position: 1.0,
-      }
-    }])
-  }
-
   EncounterPokemon(pokemon = mandatory()) {
     return this.Call([{
       request: 'ENCOUNTER',
@@ -169,6 +155,30 @@ class PokemonGOAPI {
         player_longitude: this.player.playerInfo.longitude,
       }
     }])
+  }
+
+  CatchPokemon(pokemon = mandatory()) {
+    return this.Call([{
+      request: 'CATCH_POKEMON',
+      message: {
+        encounter_id: pokemon.encounter_id,
+        pokeball: 1,
+        normalized_reticle_size: Math.min(1.95, rand.rnorm(1.9, 0.05)),
+        spawn_point_guid: pokemon.spawn_point_id,
+        hit_pokemon: true,
+        spin_modifier: Math.min(0.95, rand.rnorm(0.85, 0.1),
+        normalized_hit_position: 1.0,
+      }
+    }])
+  }
+
+  async EncounterAndCatchPokemon(pokemon = mandatory()){
+    this.isCatching=true
+    var pok = await this.EncounterPokemon(pokemon)
+    setTimeout(resolve, (Math.floor((Math.random() * 2) + 1))
+    pok = await CatchPokemon(pok)
+    this.isCatching=false
+    return pok
   }
 
   ReleasePokemon(pokemon_id = mandatory()) {

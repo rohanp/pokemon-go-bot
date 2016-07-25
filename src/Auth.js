@@ -12,7 +12,7 @@ import {
   LOGIN_OAUTH_CLIENT_ID,
   LOGIN_OAUTH_REDIRECT_URI,
   LOGIN_OAUTH_CLIENT_SECRET
-} from '../env'
+} from './settings'
 
 class Auth {
   constructor(props) {

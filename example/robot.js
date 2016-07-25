@@ -16,60 +16,54 @@ var longitude = process.env.PGO_LONGITUDE || -73.984472
 var location = {
     type: 'coords',
     coords: {
-      latitude: 55.71869901555097,
-      longitude: 12.44047164916992,
+      latitude: 55.700710651590725,
+      longitude: 12.531623840332031,
       altitude: 20,
     }
 };
 
+const Poke = new PokeAPI()
 
-var dist = geolib.getDistance(
-    {latitude: 55.7186990, longitude: 12.4404716},
-    {latitude: 55.7185490, longitude: 12.4403216}
-);
-console.log(dist)
-// const Poke = new PokeAPI()
+async function init() {
+  //yep, we do need to login..
 
-// async function init() {
-//   //yep, we do need to login..
+  const api = await Poke.login(username, password, location, provider)
 
-//   const api = await Poke.login(username, password, location, provider)
+  // just update the profile...
+  let player = await Poke.GetPlayer()
 
-//   // just update the profile...
-//   let player = await Poke.GetPlayer()
+  // get map objects..
+  while( true ){
+    let cells = await Poke.GetMapObjects()
+    for(let cell of cells) {
+      // catchable pokemons from here?
+      if (cell.catchable_pokemons.length > 0){
+        cell.catchable_pokemons.map(pokemon => {
+          let encounterResult = Poke.EncounterPokemon(pokemon);
+          console.log(encounterResult)
+          let getPokemon =  Poke.CatchPokemon(pokemon)
+          console.log(getPokemon)
 
-//   // get map objects..
-//   while( true ){
-//     let cells = await Poke.GetMapObjects()
-//     for(let cell of cells) {
-//       // catchable pokemons from here?
-//       if (cell.catchable_pokemons.length > 0){
-//         cell.catchable_pokemons.map(pokemon => {
-//           let encounterResult = Poke.EncounterPokemon(pokemon);
-//           console.log(encounterResult)
-//           let getPokemon =  Poke.CatchPokemon(pokemon)
-//           console.log(getPokemon)
+        })
+      }
 
-//         })
-//       }
+      // wild pokemons
+      if (cell.wild_pokemons.length > 0){
+        // we have wild pokemons
+        console.log(cell)
+      }
 
-//       // wild pokemons
-//       if (cell.wild_pokemons.length > 0){
-//         // we have wild pokemons
-//         console.log(cell)
-//       }
+      // forts
+      if (cell.forts.length > 0){
+        // we have wild pokemons
+      }
 
-//       // forts
-//       if (cell.forts.length > 0){
-//         // we have wild pokemons
-//       }
+      //Done...
+      //TODO: We need to move.. like a human..!
+    }
+    await Poke.player.walkAround()
+    await new Promise(resolve => setTimeout(resolve, 3000))
+  }
+}
 
-//       //Done...
-//       //TODO: We need to move.. like a human..!
-//     }
-//     await Poke.player.walkAround()
-//     await new Promise(resolve => setTimeout(resolve, 3000))
-//   }
-// }
-
-// init().catch(console.log)
+init().catch(console.log)
