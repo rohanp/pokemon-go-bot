@@ -144,8 +144,18 @@ class Gym extends Fort {
 class Checkpoint extends Fort {
   constructor(props, parent) {
     super(props, parent)
+
+    let modified = this.last_modified_timestamp_ms.toNumber()
+    let cooldown = this.cooldown_complete_timestamp_ms.toNumber()
+
     this.isCheckpoint = true
+    // The date when you can collect rewards again
+    this.cooldown = cooldown ? new Date(cooldown) : null
+    this.modified = new Date(modified)
+
     delete this.type
+    delete this.last_modified_timestamp_ms
+    delete this.cooldown_complete_timestamp_ms
     delete this.owned_by_team
     delete this.guard_pokemon_id
     delete this.guard_pokemon_cp
@@ -176,6 +186,8 @@ class Checkpoint extends Fort {
         fort_longitude: this.longitude
       }
     }])
+
+    // TODO: update the cooldown?
   }
 }
 

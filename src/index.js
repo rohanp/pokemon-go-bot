@@ -50,7 +50,7 @@ class PokemonGOAPI {
   }
 
   GetInventory() {
-    return this.Call([{ 
+    return this.Call([{
       request: 'GET_INVENTORY',
       message: {
         last_timestamp_ms: 0
@@ -113,16 +113,6 @@ class PokemonGOAPI {
     this.player.surroundings = cells
 
     return cells
-  }
-
-  EncounterPokemon(pokemon = mandatory()) {
-    console.log('[warning] this is deprecated, use pokemon.Encounter()')
-    return pokemon.Encounter()
-  }
-
-  CatchPokemon(pokemon = mandatory()) {
-    console.log('[warning] this is deprecated, use pokemon.Catch()')
-    return pokemon.Catch()
   }
 
   UseItemPotion(item_id, pokemon_id = mandatory()) {
