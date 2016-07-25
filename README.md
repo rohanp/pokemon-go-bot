@@ -38,17 +38,80 @@ See /example folder
 
 ## Available functions (more to come)
 
+## Pokemon object
+```
+{
+  id
+  pokemon_id
+  cp
+  stamina
+  stamina_max
+  move_1
+  move_2
+  deployed_fort_id
+  owner_name
+  is_egg
+  egg_km_walked_target
+  egg_km_walked_start
+  origin
+  height_m
+  weight_kg
+  individual_attack
+  individual_defense
+  individual_stamina
+  cp_multiplier
+  pokeball
+  captured_cell_id
+  battles_attacked
+  battles_defended
+  egg_incubator_id
+  creation_time_ms
+  num_upgrades
+  additional_cp_multiplier
+  favorite
+  nickname
+  from_fort
+}
+```
+#### available functions
+```
+pokemon.encounter()
+pokemon.catch()
+pokemon.encounterAndCatch()
+pokemon.release()
+```
 
-### FortRecallPokemon()  //More to come
-### FortDeployPokemon()  //More to come
-### FortDetails()  //More to come
-### FortSearch()  //More to come
-### CatchPokemon()  //More to come
-### EncounterPokemon()  //More to come
-### ReleasePokemon()  //More to come
-### UseItemPotion()  //More to come
+## Fort object (Checkpoint and Gym)
+```
+{
+  fort_id
+  team_color
+  pokemon_data
+  name
+  image_urls
+  fp
+  stamina
+  max_stamina
+  type
+  latitude
+  longitude
+  description
+  modifiers
+}
+```
+#### available functions
+```
+fort.isCheckpoint()
+fort.isGym()
+fort.search()
+fort.recallPokemon(Pokemon Object)
+fort.deployPokemon(Pokemon Object)
+fort.details()
+fort.addModifier()
+```
 
-### GetPlayer()
+
+## Poke.GetPlayer()
 - Returns the Player Object.
 
 ```js
@@ -71,7 +134,7 @@ profile{
 ```
 
 
-### GetInventory()
+## Poke.GetInventory()
 - Retrives the inventory object.
 
 ```js
@@ -89,49 +152,3 @@ profile{
 
   }
 ```
-
-##Player functions
-
-### Poke.player.coords()
-- Returns array of coords: [latitude, longitude]
-
-### Poke.player.coords()
-- Returns array of coords
-
-### Poke.player.profile()
-- Returns player profile
-
-### Poke.player.createdDate()
-- Returns account creation date (dddd, MMMM Do YYYY, h:mm:ss a)
-
-### Poke.player.pokeStorage()
-- Returns poke storage amount
-
-### Poke.player.itemsStorage()
-- Returns items storage amount
-
-### Poke.player.currency()
-- Returns currencies
-
-### Poke.player.setLocation(location)
-- Sets user location
-Input:
-```
-***location***: (required) Has to be a object of location:
-```
-```js
-{
-  type: 'name',
-  name: 'Times Square'
-}
-```
-OR
-```js
-{
-  type: 'coords',
-  latitude: 0,
-  longitude: 0,
-  altitude: 0,
-}
-
-
