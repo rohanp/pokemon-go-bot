@@ -7,7 +7,7 @@ function mandatory() {
     throw new Error('Missing parameter');
 }
 
-class Item{
+class Item {
   constructor(props, parent) {
     Object.assign(this, props)
     delete this.id
@@ -79,4 +79,3 @@ class Item{
 
 }
 export default Item
-
