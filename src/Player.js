@@ -3,6 +3,17 @@ import moment from 'moment'
 import Auth from '~/Auth'
 import geolib from 'geolib'
 
+// Gives a random meters in any direction
+function getRandomDirection(){
+  let latMorP = Math.random() < 0.5 ? -1 : 1
+  let longMorP = Math.random() < 0.5 ? -1 : 1
+
+  let latitude = ((Math.floor((Math.random() * 13) + 1))/100000)*latMorP
+  let longitude = ((Math.floor((Math.random() * 13) + 1))/100000)*longMorP
+
+  return {latitude, longitude}
+}
+
 class Player {
   constructor(props) {
     this.playerInfo = {
@@ -13,7 +24,6 @@ class Player {
       latitude: 0,
       longitude: 0,
       altitude: 0,
-      locationName: '',
       provider: '',
       sessionData: {},
     }
@@ -28,18 +38,14 @@ class Player {
     this.playerInfo.sessionData = data
   }
 
-  get locationCoords() {
-    let {latitude, longitude, altitude} = this.playerInfo
-    return {
-      latitude,
-      longitude,
-      altitude
-    }
+  get location() {
+    let { latitude, longitude } = this.playerInfo
+    return { latitude, longitude }
   }
 
-  get coords() {
-    let {latitude, longitude} = this.playerInfo
-    return [latitude, longitude]
+  set location(coords) {
+    Object.assign(this.playerInfo, coords)
+    return coords
   }
 
   get profile() {
@@ -84,102 +90,43 @@ class Player {
     return this.playerInfo
   }
 
-  teleport(lat, long, alt){
-    this.playerInfo.latitude = lat
-    this.playerInfo.longitude = long
-    this.playerInfo.altitude = alt
-  }
-
   walkAround(){
-    let latMorP = Math.random() < 0.5 ? -1 : 1
-    let latRand = ((Math.floor((Math.random() * 13) + 1))/100000)*latMorP
-    latMorP = Math.random() < 0.5 ? -1 : 1
-    let longRand = ((Math.floor((Math.random() * 13) + 1))/100000)*latMorP
+    let random = getRandomDirection()
 
-    var dist = geolib.getDistance(
-        {latitude: this.playerInfo.latitude, longitude: this.playerInfo.longitude},
-        {latitude: this.playerInfo.latitude + latRand, longitude: this.playerInfo.longitude + longRand}
-    )
+    let destination = {
+      latitude: this.location.latitude + random.latitude,
+      longitude: this.location.longitude + random.longitude
+    }
 
-    this.playerInfo.latitude += latRand
-    this.playerInfo.longitude += longRand
+    let distance = geolib.getDistance(this.location, destination)
 
-    console.log(`[i] We just walked ${dist} meters`)
+    this.location = destination
+
+    console.log(`[i] We just walked ${distance} meters`)
   }
 
 
   async walkToPoint(lat, long){
-    let latMorP = Math.random() < 0.5 ? -1 : 1
-    let latRand = ((Math.floor((Math.random() * 13) + 1))/100000)*latMorP
-    latMorP = Math.random() < 0.5 ? -1 : 1
-    let longRand = ((Math.floor((Math.random() * 13) + 1))/100000)*latMorP
+    let random = getRandomDirection()
 
-    if (this.playerInfo.latitude > lat)
-      this.playerInfo.latitude = this.playerInfo.latitude-latRand
-    else
-      this.playerInfo.latitude = this.playerInfo.latitude+latRand
+    let destination = {
+      latitude: this.location.latitude > lat
+        ? this.playerInfo.latitude -= random.latitude
+        : this.playerInfo.latitude += random.latitude,
 
-    if (this.playerInfo.longitude > lat)
-      this.playerInfo.longitude = this.playerInfo.longitude-longRand
-    else
-      this.playerInfo.longitude = this.playerInfo.longitude+longRand
+      longitude: this.location.longitude > lat
+        ? this.playerInfo.longitude -= random.latitude
+        : this.playerInfo.longitude += random.latitude
+    }
 
-    var distance = geolib.getDistance(
-        {latitude: this.playerInfo.longitude, longitude: this.playerInfo.longitude},
-        {latitude: lat, longitude: long}
-    )
+    var distance = geolib.getDistance(this.location, destination)
+
     //distance less than 10 meters?
     if (distance <= 10){
       return true
     } else {
-      this.walkToPoint(lat,long)
+      this.walkToPoint(lat, long)
     }
-  }
-
-
-  setLocation(location) {
-    return new Promise(resolve => {
-      if (location.type !== 'name' && location.type !== 'coords')
-        throw new Error('Invalid location type')
-
-      // use google map search by name
-      if (location.type === 'name') {
-        if (!location.name)
-          throw new Error('You should add a location name')
-
-        const locationName = location.name;
-        GeoCoder.geocode(locationName, (err, data) => {
-          if (err || data.status === 'ZERO_RESULTS')
-            throw new Error('location not found')
-
-          let {lat, lng} = data.results[0].geometry.location
-
-          this.playerInfo.latitude = lat
-          this.playerInfo.longitude = lng
-          this.playerInfo.locationName = locationName
-
-          //return
-          resolve(this.locationCoords)
-        })
-        return
-      }
-
-      // use latitude longitude
-      if (!location.coords) throw new Error('Coords object missing')
-
-      this.playerInfo.latitude = location.coords.latitude || this.playerInfo.latitude
-      this.playerInfo.longitude = location.coords.longitude || this.playerInfo.longitude
-      this.playerInfo.altitude = location.coords.altitude || this.playerInfo.altitude
-
-      GeoCoder.reverseGeocode(...this.coords, (err, data) => {
-        if (data.status !== 'ZERO_RESULTS')
-          this.playerInfo.locationName = data.results[0].formatted_address
-
-        //return
-        resolve(this.locationCoords)
-      })
-
-    })
   }
 
 }
