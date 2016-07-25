@@ -25,7 +25,7 @@ class PokemonGOAPI {
     this.map = new PlayerMap()
     this.logged = false
     this.debug = true
-    this.useHartBeat = false
+    this.useHeartBeat = false
   }
 
   async login(username, password, provider) {
@@ -66,16 +66,16 @@ class PokemonGOAPI {
   //
   // HeartBeat
   //
-  async ToggleHartBeat() {
-    this.useHartBeat = !this.useHartBeat
-    this._loopHartBeat()
-    return this.useHartBeat
+  async ToggleHeartBeat() {
+    this.useHeartBeat = !this.useHeartBeat
+    this._loopHeartBeat()
+    return this.useHeartBeat
   }
 
-  async _loopHartBeat() {
-    while(this.useHartBeat){
+  async _loopHeartBeat() {
+    while(this.useHeartBeat){
       var area = this.GetMapObjects()
-      console.log('[+] Sendt out hartbeat: (player.surroundings is updated)')
+      console.log('[+] Sent out heartbeat: (player.surroundings is updated)')
       await new Promise(resolve => setTimeout(resolve, 2700))
     }
   }
