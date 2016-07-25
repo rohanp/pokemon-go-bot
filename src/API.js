@@ -15,7 +15,8 @@ var bufferFile = Protobuf.loadProtoFile({ root: rootPath, file: "POGOProtos/POGO
 const POGOProtos = bufferFile.build("POGOProtos")
 
 class Connection {
-  constructor(props) {
+  constructor(parent) {
+    this.parent = parent
     this.endPoint = API_URL
     this.auth_ticket = null
   }

@@ -15,7 +15,8 @@ function getRandomDirection(){
 }
 
 class Player {
-  constructor(props) {
+  constructor(parent) {
+    this.parent = parent
     this.playerInfo = {
       accessToken: '',
       username: '',
@@ -127,6 +128,44 @@ class Player {
     } else {
       this.walkToPoint(lat, long)
     }
+  }
+
+
+  settings() {
+    return this.parent.Call([{
+      request: 'DOWNLOAD_SETTINGS',
+      message: {
+        hash: "05daf51635c82611d1aac95c0b051d3ec088a930",
+      }
+    }])
+  }
+
+  itemTemplates() {
+    return this.parent.Call([{
+      request: 'DOWNLOAD_ITEM_TEMPLATES',
+    }])
+  }
+
+  remoteConfigVersion() {
+    return this.parent.Call([{
+      request: 'DOWNLOAD_REMOTE_CONFIG_VERSION',
+      message: {
+        platform: 2, //android
+        device_manufacturer: "Samsung",
+        device_model: "SM-G920F",
+        locale: "en-GB",
+        app_version: 293,
+      }
+    }])
+  }
+
+  remoteConfigVersion() {
+    return this.parent.Call([{
+      request: 'GET_PLAYER_PROFILE',
+      message: {
+        player_name: this.sessionData.username
+      }
+    }])
   }
 
 }
