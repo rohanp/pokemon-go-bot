@@ -12,64 +12,117 @@ class Fort {
     Object.defineProperty(this, 'parent', {value: parent})
   }
 
+
+
+  /**
+   * TODO: description
+   * is this when you search pokestop and
+   * get pokeball among other things?
+   * Then this should only be in the Checkpoint class...?
+   *
+   * [search description]
+   * @return {[type]} [description]
+   */
   search() {
+    let {latitude, longitude} = this.parent.player.location
+
     return this.parent.Call([{
       request: 'FORT_SEARCH',
       message: {
-        fort_id: this.fort.fort_id,
-        player_latitude: this.parent.player.playerInfo.latitude,
-        player_longitude: this.parent.player.playerInfo.longitude,
-        fort_latitude: this.fort.fort_latitude,
-        fort_longitude: this.fort.fort_longitude
+        fort_id: this.id,
+        player_latitude: latitude,
+        player_longitude: longitude,
+        fort_latitude: this.latitude,
+        fort_longitude: this.longitude
       }
     }])
   }
 
-  // TODO should only be in Gym class?
+
+
+  /**
+   * TODO: description
+   * TODO should only be in Gym class?
+   *
+   * [recallPokemon description]
+   * @param  {[type]} pokemon [description]
+   * @return {[type]}         [description]
+   */
   recallPokemon(pokemon) {
+    let {latitude, longitude} = this.parent.player.location
+
     return this.parent.Call([{
       request: 'FORT_RECALL_POKEMON',
       message: {
         fort_id: this.id,
         pokemon_id: pokemon.pokemon_id,
-        player_latitude: this.parent.player.playerInfo.latitude,
-        player_longitude: this.parent.player.playerInfo.longitude,
+        player_latitude: latitude,
+        player_longitude: longitude
       }
     }])
   }
 
-  // TODO should only be in Gym class?
+
+
+  /**
+   * TODO: description
+   * TODO should only be in Gym class?
+   *
+   * [deployPokemon description]
+   * @param  {[type]} pokemon [description]
+   * @return {[type]}         [description]
+   */
   deployPokemon(pokemon) {
+    let {latitude, longitude} = this.parent.player.location
+
     return this.parent.Call([{
       request: 'FORT_DEPLOY_POKEMON',
       message: {
         fort_id: this.id,
         pokemon_id: pokemon.pokemon_id,
-        player_latitude: this.player.playerInfo.latitude,
-        player_longitude: this.player.playerInfo.longitude,
+        player_latitude: latitude,
+        player_longitude: longitude
       }
     }])
   }
 
+
+
+  /**
+   * TODO: description
+   *
+   * [details description]
+   * @return {[type]} [description]
+   */
   details() {
     return this.parent.Call([{
       request: 'FORT_DETAILS',
       message: {
-        fort_id: this.fort.fort_id,
-        latitude: this.fort.latitude,
-        longitude: this.fort.longitude,
+        fort_id: this.id,
+        latitude: this.latitude,
+        longitude: this.longitude,
       }
     }])
   }
 
+
+
+  /**
+   * TODO: description
+   *
+   * [addModifier description]
+   * @param {[type]} item_id [description]
+   */
   addModifier(item_id){
+    let {latitude, longitude} = this.parent.player.location
+
     return this.parent.Call([{
       request: 'FORT_DETAILS',
       message: {
         modifier_type: item_id,
-        fort_id: this.fort.fort_id,
-        player_latitude: this.parent.player.playerInfo.latitude,
-        player_longitude: this.parent.player.playerInfo.longitude,
+        fort_id: this.id,
+        player_latitude: latitude,
+        player_longitude: longitude
       }
     }])
   }

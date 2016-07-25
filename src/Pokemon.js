@@ -25,18 +25,23 @@ class Pokemon{
   }
 
   async encounter() {
+    let {latitude, longitude} = this.parent.player.location
+
     this.isCatching = true
-    var res = await this.parent.Call([{
+
+    let res = await this.parent.Call([{
       request: 'ENCOUNTER',
       message: {
         encounter_id: this.encounter_id,
         spawn_point_id: this.spawn_point_id,
-        player_latitude: this.parent.player.playerInfo.latitude,
-        player_longitude: this.parent.player.playerInfo.longitude,
+        player_latitude: latitude,
+        player_longitude: longitude,
       }
     }])
-    this.encounter_id = res.EncounterResponse.wild_pokemon.encounter_id
-    this.spawn_point_id = res.EncounterResponse.wild_pokemon.spawn_point_id
+
+    let pokemon = res.EncounterResponse.wild_pokemon
+    this.encounter_id = pokemon.encounter_id
+    this.spawn_point_id = pokemon.spawn_point_id
     return res
   }
 
@@ -53,16 +58,18 @@ class Pokemon{
         normalized_hit_position: 1.0,
       }
     }])
+
     this.isCatching = false
+
     return res
   }
 
   async encounterAndCatch(){
-    this.isCatching=true
+    this.isCatching = true
     var pok = await this.encounter()
-    //todo.. add a little timer here?
+    // todo.. add a little timer here?
     var result = await this.catch()
-    this.isCatching=false
+    this.isCatching = false
 
     return result
   }
