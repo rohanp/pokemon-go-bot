@@ -16,7 +16,7 @@ class Fort {
     return this.parent.Call([{
       request: 'FORT_SEARCH',
       message: {
-        fort_id: this.fort.fort_id,
+        fort_id: this.id,
         player_latitude: this.parent.player.playerInfo.latitude,
         player_longitude: this.parent.player.playerInfo.longitude,
         fort_latitude: this.fort.fort_latitude,
