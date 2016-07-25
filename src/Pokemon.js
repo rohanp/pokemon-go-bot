@@ -71,7 +71,7 @@ class Pokemon{
     return this.parent.Call([{
       request: 'RELEASE_POKEMON',
       message: {
-        pokemon_id: this.pokemon_id
+        pokemon_id: this.pokemon_id,
       }
     }])
   }
@@ -80,7 +80,7 @@ class Pokemon{
     return this.parent.Call([{
       request: 'EVOLVE_POKEMON',
       message: {
-        pokemon_id: this.pokemon_id
+        pokemon_id: this.pokemon_id,
       }
     }])
   }
@@ -89,7 +89,7 @@ class Pokemon{
     return this.parent.Call([{
       request: 'UPGRADE_POKEMON',
       message: {
-        pokemon_id: this.pokemon_id
+        pokemon_id: this.pokemon_id,
       }
     }])
   }
@@ -98,7 +98,7 @@ class Pokemon{
     return this.parent.Call([{
       request: 'SET_FAVORITE_POKEMON',
       message: {
-        pokemon_id: this.pokemon_id
+        pokemon_id: this.pokemon_id,
         is_favorite: true,
       }
     }])
@@ -108,7 +108,7 @@ class Pokemon{
     return this.parent.Call([{
       request: 'NICKNAME_POKEMON',
       message: {
-        pokemon_id: this.pokemon_id
+        pokemon_id: this.pokemon_id,
         nickname: name,
       }
     }])
