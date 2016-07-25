@@ -127,6 +127,8 @@ class Player {
       return true
     } else {
       this.walkToPoint(lat, long)
+      console.log(`[i] Walking closer to [`+lat+`,`+lng+`] - distance is: ${distance} meters`)
+      await new Promise(resolve => setTimeout(resolve, 2700))
     }
   }
 

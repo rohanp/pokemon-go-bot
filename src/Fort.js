@@ -30,7 +30,7 @@ class Fort {
     return this.parent.Call([{
       request: 'FORT_RECALL_POKEMON',
       message: {
-        fort_id: this.fort_id,
+        fort_id: this.id,
         pokemon_id: pokemon.pokemon_id,
         player_latitude: this.parent.player.playerInfo.latitude,
         player_longitude: this.parent.player.playerInfo.longitude,
@@ -43,7 +43,7 @@ class Fort {
     return this.parent.Call([{
       request: 'FORT_DEPLOY_POKEMON',
       message: {
-        fort_id: this.fort_id,
+        fort_id: this.id,
         pokemon_id: pokemon.pokemon_id,
         player_latitude: this.player.playerInfo.latitude,
         player_longitude: this.player.playerInfo.longitude,
