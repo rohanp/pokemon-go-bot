@@ -1,6 +1,6 @@
 {
   "name": "pokemongo-api",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "description": "Pokemon Go API",
   "main": "dist/index.js",
   "scripts": {
