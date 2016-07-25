@@ -91,12 +91,19 @@ class PokemonGOAPI {
     let cells = res.GetMapObjectsResponse.map_cells
 
     for(let cell of cells) {
+
       cell.catchable_pokemons = cell.catchable_pokemons.map(pokemon =>
         new Pokemon(pokemon, this)
       )
+
       cell.forts = cell.forts.map(fort =>
         Fort(fort, this)
       )
+
+      cell.nearby_pokemons = cell.nearby_pokemons.map(pokemon =>
+        new Pokemon(pokemon, this)
+      )
+
     }
 
     return cells

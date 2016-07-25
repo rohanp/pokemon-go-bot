@@ -9,8 +9,13 @@ for(let p of pokedex.pokemon)
 class Pokemon{
   constructor(props, parent) {
     Object.assign(this, props, pokedexMap.get(props.pokemon_id))
+
     delete this.id
-    console.log(`[i] found ${this.name}. Direction: ${this.direction}`)
+    this.catchable = !props.distance_in_meters
+
+    if(this.catchable)
+      console.log(`[i] found ${this.name}. Direction: ${this.direction}`)
+
     this.parent = parent
   }
 
@@ -48,7 +53,7 @@ class Pokemon{
         normalized_hit_position: 1.0,
       }
     }])
-    this.isCatching=false
+    this.isCatching = false
     return res
   }
 
