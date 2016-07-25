@@ -1,3 +1,4 @@
+import geolib from 'geolib'
 
 /**
  * Called if a parameter is missing and
@@ -9,81 +10,30 @@ function mandatory() {
 
 class Fort {
   constructor(props, parent) {
+    Object.assign(this, props)
     Object.defineProperty(this, 'parent', {value: parent})
   }
 
 
-
   /**
-   * TODO: description
-   * is this when you search pokestop and
-   * get pokeball among other things?
-   * Then this should only be in the Checkpoint class...?
-   *
-   * [search description]
-   * @return {[type]} [description]
+   * Return the coordinates of the fort
+   * @return {Object} {latitude, longitude}
    */
-  search() {
-    let {latitude, longitude} = this.parent.player.location
-
-    return this.parent.Call([{
-      request: 'FORT_SEARCH',
-      message: {
-        fort_id: this.id,
-        player_latitude: latitude,
-        player_longitude: longitude,
-        fort_latitude: this.latitude,
-        fort_longitude: this.longitude
-      }
-    }])
+  get location() {
+    let { latitude, longitude } = this
+    return { latitude, longitude }
   }
 
 
 
   /**
-   * TODO: description
-   * TODO should only be in Gym class?
+   * Return the distance in meters from players location
+   * to the Checkpoint or Gym`s location
    *
-   * [recallPokemon description]
-   * @param  {[type]} pokemon [description]
-   * @return {[type]}         [description]
+   * @return {Number} meters
    */
-  recallPokemon(pokemon) {
-    let {latitude, longitude} = this.parent.player.location
-
-    return this.parent.Call([{
-      request: 'FORT_RECALL_POKEMON',
-      message: {
-        fort_id: this.id,
-        pokemon_id: pokemon.pokemon_id,
-        player_latitude: latitude,
-        player_longitude: longitude
-      }
-    }])
-  }
-
-
-
-  /**
-   * TODO: description
-   * TODO should only be in Gym class?
-   *
-   * [deployPokemon description]
-   * @param  {[type]} pokemon [description]
-   * @return {[type]}         [description]
-   */
-  deployPokemon(pokemon) {
-    let {latitude, longitude} = this.parent.player.location
-
-    return this.parent.Call([{
-      request: 'FORT_DEPLOY_POKEMON',
-      message: {
-        fort_id: this.id,
-        pokemon_id: pokemon.pokemon_id,
-        player_latitude: latitude,
-        player_longitude: longitude
-      }
-    }])
+  get distance() {
+    return geolib.getDistance(this.location, this.parent.player.location)
   }
 
 
@@ -134,17 +84,66 @@ class Gym extends Fort {
   constructor(props, parent) {
     super(props, parent)
 
-    Object.assign(this, props)
     delete this.type
     delete this.lure_info
     this.isGym = true
   }
+
+
+
+  /**
+   * TODO: description
+   *
+   * [recallPokemon description]
+   * @param  {[type]} pokemon [description]
+   * @return {[type]}         [description]
+   */
+  recallPokemon(pokemon) {
+    let {latitude, longitude} = this.parent.player.location
+
+    return this.parent.Call([{
+      request: 'FORT_RECALL_POKEMON',
+      message: {
+        fort_id: this.id,
+        pokemon_id: pokemon.pokemon_id,
+        player_latitude: latitude,
+        player_longitude: longitude
+      }
+    }])
+  }
+
+
+
+  /**
+   * TODO: description
+   *
+   * [deployPokemon description]
+   * @param  {[type]} pokemon [description]
+   * @return {[type]}         [description]
+   */
+  deployPokemon(pokemon) {
+    let {latitude, longitude} = this.parent.player.location
+
+    return this.parent.Call([{
+      request: 'FORT_DEPLOY_POKEMON',
+      message: {
+        fort_id: this.id,
+        pokemon_id: pokemon.pokemon_id,
+        player_latitude: latitude,
+        player_longitude: longitude
+      }
+    }])
+  }
 }
 
+
+/**
+ * Checkpoint is a "pokestop" where you can
+ * get items from it by spining.
+ */
 class Checkpoint extends Fort {
   constructor(props, parent) {
     super(props, parent)
-    Object.assign(this, props)
     this.isCheckpoint = true
     delete this.type
     delete this.owned_by_team
@@ -154,6 +153,29 @@ class Checkpoint extends Fort {
     delete this.is_in_battle
     delete this.sponsor
     delete this.rendering_type
+  }
+
+
+
+  /**
+   * search spins the pokestop
+   * you get pokemon balls among other things
+   *
+   * @return {[type]} [description]
+   */
+  search() {
+    let {latitude, longitude} = this.parent.player.location
+
+    return this.parent.Call([{
+      request: 'FORT_SEARCH',
+      message: {
+        fort_id: this.id,
+        player_latitude: latitude,
+        player_longitude: longitude,
+        fort_latitude: this.latitude,
+        fort_longitude: this.longitude
+      }
+    }])
   }
 }
 

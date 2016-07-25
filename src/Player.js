@@ -109,8 +109,7 @@ class Player {
 
   async walkToPoint(lat, long){
       // at 4 m/s
-
-    let stepSize = 8 // meters 
+    let stepSize = 8 // meters
 
     let destination = {
       latitude: lat,
@@ -139,9 +138,10 @@ class Player {
 
     //distance less than 10 meters?
     if (distance <= 10){
+      console.log(`[i] Walked to specified distance`)
       return true
     } else {
-
+        
       this.location  = newLocation
       console.log(`[i] Walking closer to [`+lat+`,`+long+`] - distance is: ${distance} meters`)
       await new Promise(resolve => setTimeout(resolve, 2000))
