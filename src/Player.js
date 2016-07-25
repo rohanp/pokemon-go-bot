@@ -92,13 +92,44 @@ class Player {
   
   walkAround(){
     let latMorP = Math.random() < 0.5 ? -1 : 1
-    let latRand = ((Math.floor((Math.random() * 100) + 1))/10000000)*latMorP
+    let latRand = ((Math.floor((Math.random() * 13) + 1))/100000)*latMorP
     latMorP = Math.random() < 0.5 ? -1 : 1
-    let longRand = ((Math.floor((Math.random() * 100) + 1))/10000000)*latMorP
+    let longRand = ((Math.floor((Math.random() * 13) + 1))/100000)*latMorP
 
     this.playerInfo.latitude = this.playerInfo.latitude+latRand
     this.playerInfo.longitude = this.playerInfo.longitude+longRand  
   }
+
+  
+  async walkToPoint(lat,long){
+
+    let latMorP = Math.random() < 0.5 ? -1 : 1
+    let latRand = ((Math.floor((Math.random() * 13) + 1))/100000)*latMorP
+    latMorP = Math.random() < 0.5 ? -1 : 1
+    let longRand = ((Math.floor((Math.random() * 13) + 1))/100000)*latMorP
+
+    if (this.playerInfo.latitude > lat) 
+      this.playerInfo.latitude = this.playerInfo.latitude-latRand
+    else
+      this.playerInfo.latitude = this.playerInfo.latitude+latRand
+
+    if (this.playerInfo.longitude > lat) 
+      this.playerInfo.longitude = this.playerInfo.longitude-longRand
+    else
+      this.playerInfo.longitude = this.playerInfo.longitude+longRand
+
+    var distance = geolib.getDistance(
+        {latitude: this.playerInfo.longitude, longitude: this.playerInfo.longitude},
+        {latitude: lat, long}
+    )
+    //distance less than 10 meters?
+    if (distance <= 10){
+      return true
+    }else{
+      this.walkToPoint(lat,long)
+    }
+  }
+
 
   setLocation(location) {
     return new Promise(resolve => {
