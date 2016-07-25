@@ -149,6 +149,7 @@ class Checkpoint extends Fort {
     let cooldown = this.cooldown_complete_timestamp_ms.toNumber()
 
     this.isCheckpoint = true
+    // The date when you can collect rewards again
     this.cooldown = cooldown ? new Date(cooldown) : null
     this.modified = new Date(modified)
 
