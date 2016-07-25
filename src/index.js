@@ -63,16 +63,15 @@ class PokemonGOAPI {
   //
   async ToggleHartBeat() {
     this.useHartBeat = !this.useHartBeat
-    // this._loopHartBeat()
+    this._loopHartBeat()
     return this.useHartBeat
   }
 
   async _loopHartBeat() {
     while(this.useHartBeat){
-      setInterval(() => {
-        console.log('hartbeat..')
-        // var area = this.GetMapObjects()
-      },2000);
+      var area = this.GetMapObjects()
+      console.log('[+] Sendt out hartbeat: (player.surroundings is updated)')
+      await new Promise(resolve => setTimeout(resolve, 2700))
     }
   }
 
@@ -106,6 +105,7 @@ class PokemonGOAPI {
       )
 
     }
+    this.player.surroundings = cells
 
     return cells
   }
