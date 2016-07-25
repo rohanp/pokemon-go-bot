@@ -63,14 +63,15 @@ class PokemonGOAPI {
   //
   async ToggleHartBeat() {
     this.useHartBeat = !this.useHartBeat
-    this._loopHartBeat()
+    // this._loopHartBeat()
     return this.useHartBeat
   }
 
   async _loopHartBeat() {
     while(this.useHartBeat){
       setInterval(() => {
-        var area = this.GetMapObjects()
+        console.log('hartbeat..')
+        // var area = this.GetMapObjects()
       },2000);
     }
   }
