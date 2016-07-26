@@ -117,7 +117,7 @@ class Player {
     else
       this.playerInfo.latitude = this.playerInfo.latitude+latRand
 
-    if (this.playerInfo.longitude > lat)
+    if (this.playerInfo.longitude > long)
       this.playerInfo.longitude = this.playerInfo.longitude-longRand
     else
       this.playerInfo.longitude = this.playerInfo.longitude+longRand
@@ -134,7 +134,7 @@ class Player {
     } else {
       console.log(`[i] Walking closer to [`+lat+`,`+long+`] - distance is: ${distance} meters`)
       await new Promise(resolve => setTimeout(resolve, 2000))
-      this.walkToPoint(lat, long)
+      await this.walkToPoint(lat, long)
     }
   }
 
