@@ -3,6 +3,7 @@
   "description": "Pokemon Go API",
   "main": "dist/index.js",
   "scripts": {
+    "commit": "git-cz",
     "compile": "babel --presets es2015,stage-0 -d dist/ src/",
     "prepublish": "npm run compile",
     "example": "babel-node example/example.js",
