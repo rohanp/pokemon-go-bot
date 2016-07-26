@@ -39,6 +39,17 @@ class Fort {
 
 
   /**
+   * Tells you if you are close enough to do something with it
+   *
+   * @return {Boolean} true if you can reach it
+   */
+  get withinRange() {
+    return this.distance < 40
+  }
+
+
+
+  /**
    * TODO: description
    *
    * [details description]
