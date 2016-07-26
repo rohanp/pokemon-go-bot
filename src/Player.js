@@ -57,7 +57,7 @@ class Player {
 
   get pokeStorage() {
     var storage = this.playerInfo.sessionData.max_pokemon_storage
-    console.log(`[+] Poke Storage: {${storage}}`)
+    // console.log(`[+] Poke Storage: {${storage}}`)
     return storage
   }
 

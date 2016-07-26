@@ -72,7 +72,7 @@ class Pokemon {
         }
     }
 
-    console.log("Caught!")å
+    console.log("Caught!")
     this.isCatching = false
 
     return res

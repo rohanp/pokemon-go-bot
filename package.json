@@ -6,8 +6,9 @@
   "scripts": {
     "compile": "babel --presets es2015,stage-0 -d dist/ src/",
     "prepublish": "npm run compile",
-    "example": "babel-node example/example.js",
-    "robot": "babel-node example/robot.js"
+    "example": "babel-node scripts/example.js",
+    "robot": "babel-node scripts/robot.js",
+    "robot2": "babel-node scripts/robot2.js"
   },
   "repository": {
     "type": "git",
