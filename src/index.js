@@ -83,6 +83,20 @@ class PokemonGOAPI {
     return res.GetPlayerResponse.player_data
   }
 
+
+  async ToggleWalkToPoint(lat,lng){
+    this.walkToPoint = !this.walkToPoint
+    this._walkToPoint(lat,lng)
+    return this.walkToPoint
+  }
+  async _walkToPoint(lat,lng) {
+    while(this.walkToPoint){
+      this.player.walkToPoint(lat,lng)
+      await new Promise(resolve => setTimeout(resolve, 2700))
+    }
+  }
+
+
   //
   // HeartBeat
   //

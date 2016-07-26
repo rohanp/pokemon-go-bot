@@ -132,9 +132,7 @@ class Player {
       console.log(`[i] Walked to specified distance`)
       return true
     } else {
-      console.log(`[i] Walking closer to [`+lat+`,`+long+`] - distance is: ${distance} meters`)
-      await new Promise(resolve => setTimeout(resolve, 2000))
-      await this.walkToPoint(lat, long)
+      console.log(`[i] Walked closer to [`+lat+`,`+long+`] - distance is now: ${distance} meters`)
     }
   }
 
