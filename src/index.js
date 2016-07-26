@@ -17,6 +17,23 @@ function mandatory() {
     throw new Error('Missing parameter');
 }
 
+
+/**
+ * Called to sort objects in array by a value
+ */
+function dynamicSort(property) {
+  var sortOrder = 1;
+  if(property[0] === "-") {
+    sortOrder = -1;
+    property = property.substr(1);
+  }
+  return function (a,b) {
+    var result = (a[property] < b[property]) ? -1 : (a[property] > b[property]) ? 1 : 0;
+    return result * sortOrder;
+  }
+}
+
+
 class PokemonGOAPI {
 
   constructor(props) {
@@ -132,13 +149,16 @@ class PokemonGOAPI {
       )
       cell.forts.map(fort => {
         fort = Fort(fort, this)
+        fort.lastDistance = fort.distance
         if (fort.isCheckpoint)
           objects.forts.checkpoints.push(fort)
         else
           objects.forts.gyms.push(fort)
         }
       )
-
+      //sort checkpoints
+      objects.forts.checkpoints.sort(dynamicSort("lastDistance"));
+      objects.forts.gyms.sort(dynamicSort("lastDistance"));
     }
     this.player.surroundings = cells
 
