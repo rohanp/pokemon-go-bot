@@ -123,7 +123,7 @@ class Player {
       this.playerInfo.longitude = this.playerInfo.longitude+longRand
 
     var distance = geolib.getDistance(
-        {latitude: this.playerInfo.longitude, longitude: this.playerInfo.longitude},
+        {latitude: this.playerInfo.latitude, longitude: this.playerInfo.longitude},
         {latitude: lat, longitude: long}
     )
 
