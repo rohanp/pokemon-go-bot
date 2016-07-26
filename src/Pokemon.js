@@ -45,19 +45,37 @@ class Pokemon {
     return res
   }
 
-  async catch(pokeball) {
-    var res = await this.parent.Call([{
-      request: 'CATCH_POKEMON',
-      message: {
-        encounter_id: this.encounter_id,
-        pokeball: pokeball || 1, // 2 for grate ball
-        normalized_reticle_size: Math.min(1.95, rand.rnorm(1.9, 0.05)),
-        spawn_point_guid: this.spawn_point_id,
-        hit_pokemon: true,
-        spin_modifier: Math.min(0.95, rand.rnorm(0.85, 0.1)),
-        normalized_hit_position: 1.0,
-      }
-    }])
+  async catch() {
+
+    var res;
+
+    for(let i of Array(10)){
+        var pokeball_ = 1
+
+        try{
+            res = await this.parent.Call([{
+              request: 'CATCH_POKEMON',
+              message: {
+                encounter_id: this.encounter_id,
+                pokeball: pokeball_,
+                normalized_reticle_size: Math.min(1.95, rand.rnorm(1.9, 0.05)),
+                spawn_point_guid: this.spawn_point_id,
+                hit_pokemon: true,
+                spin_modifier: Math.min(0.95, rand.rnorm(0.85, 0.1)),
+                normalized_hit_position: 1.0,
+              }
+            }])
+            break
+        } catch (error){
+            console.log("Failed to catch. Trying again...")
+            if (7 < i){
+                console.log("Whipping out the MasterBall")
+                pokeball_ = 2
+            }
+        }
+    }
+
+    console.log("Caught!")
 
     this.isCatching = false
 

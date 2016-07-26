@@ -3,15 +3,10 @@ import moment from 'moment'
 import Auth from '~/Auth'
 import geolib from 'geolib'
 
-// Gives a random meters in any direction
-function getRandomDirection(){
-  let latMorP = Math.random() < 0.5 ? -1 : 1
-  let longMorP = Math.random() < 0.5 ? -1 : 1
 
-  let latitude = ((Math.floor((Math.random() * 13) + 1))/100000)*latMorP
-  let longitude = ((Math.floor((Math.random() * 13) + 1))/100000)*longMorP
-
-  return {latitude, longitude}
+// all floats yo
+function randrange(range){
+    return Math.random() * range - range/2
 }
 
 class Player {
@@ -89,17 +84,24 @@ class Player {
     this.playerInfo.accessToken = res
 
     return this.playerInfo
-  }
+}
 
-  walkAround(){
-    let random = getRandomDirection()
+  walkAround(origin){
+
+    var randlat = randrange(2e-4)
+    var randlong = randrange(2e-4)
 
     let destination = {
-      latitude: this.location.latitude + random.latitude,
-      longitude: this.location.longitude + random.longitude
+      latitude: this.location.latitude + randlat,
+      longitude: this.location.longitude + randlong,
     }
 
-    let distance = geolib.getDistance(this.location, destination)
+    let distance = geolib.getDistance(this.location, origin)
+
+    if (distance > 300){
+        console.log("I've wandered off! Heading back to origin...")
+        walkToPoint(...origin)
+    }
 
     this.location = destination
 
@@ -108,6 +110,10 @@ class Player {
 
 
   async walkToPoint(lat, long){
+
+      if (lat == null || long == null)
+        throw new Error('Null lat/long')
+
       // at 4 m/s
     let stepSize = 8 // meters
 
@@ -141,7 +147,7 @@ class Player {
       console.log(`[i] Walked to specified distance`)
       return true
     } else {
-        
+
       this.location  = newLocation
       console.log(`[i] Walking closer to [`+lat+`,`+long+`] - distance is: ${distance} meters`)
       await new Promise(resolve => setTimeout(resolve, 2000))

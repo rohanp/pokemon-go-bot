@@ -19,10 +19,10 @@ class Fort {
    * Return the coordinates of the fort
    * @return {Object} {latitude, longitude}
    */
-  get location() {
-    let { latitude, longitude } = this
-    return { latitude, longitude }
-  }
+   get location() {
+     let { latitude, longitude } = this
+     return { latitude, longitude }
+   }
 
 
 
