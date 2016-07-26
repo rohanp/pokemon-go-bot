@@ -1,17 +1,19 @@
 {
   "name": "pokemongo-api",
-  "version": "0.1.10",
   "description": "Pokemon Go API",
+  "version": "0.0.0-semantic-release",
   "main": "dist/index.js",
   "scripts": {
     "compile": "babel --presets es2015,stage-0 -d dist/ src/",
     "prepublish": "npm run compile",
     "example": "babel-node example/example.js",
-    "robot": "babel-node example/robot.js"
+    "robot": "babel-node example/robot.js",
+    "semantic-release": "semantic-release pre && npm publish && semantic-release post"
+
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/stoffern/pokemon-go-api.git"
+    "url": "https://github.com/stoffern/pokemon-go-api.git"
   },
   "author": "stoffern",
   "license": "ISC",
@@ -24,7 +26,8 @@
     "babel-core": "^6.11.4",
     "babel-preset-es2015": "^6.9.0",
     "babel-preset-stage-0": "^6.5.0",
-    "babel-project-relative-import": "^2.0.0"
+    "babel-project-relative-import": "^2.0.0",
+    "semantic-release": "^4.3.5"
   },
   "dependencies": {
     "geocoder": "^0.2.2",
