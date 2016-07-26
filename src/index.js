@@ -60,6 +60,7 @@ class PokemonGOAPI {
 
   async GetPlayer() {
     let res = await this.Call([{ request: 'GET_PLAYER' }])
+    this.player.playerInfo.sessionData = res.GetPlayerResponse.player_data
     return res.GetPlayerResponse.player_data
   }
 

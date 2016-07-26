@@ -55,26 +55,26 @@ class Player {
 
   // TODO return Date obj
   get createdDate() {
-    var date = new moment((this.playerInfo.sessionData.creation_time.toString() / 100)).format("dddd, MMMM Do YYYY, h:mm:ss a")
+    var date = new moment((this.playerInfo.sessionData.creation_timestamp_ms.toString() / 100)).format("dddd, MMMM Do YYYY, h:mm:ss a")
     console.log(`[+] You are playing Pokemon Go since: {${date}}`)
     return date
   }
 
   get pokeStorage() {
-    var storage = this.playerInfo.sessionData.poke_storage
+    var storage = this.playerInfo.sessionData.max_pokemon_storage
     console.log(`[+] Poke Storage: {${storage}}`)
     return storage
   }
 
   get itemsStorage() {
-    var storage = this.playerInfo.sessionData.item_storage
+    var storage = this.playerInfo.sessionData.max_item_storage
     console.log(`[+] Item Storage: {${storage}}`)
     return storage
   }
 
   // TODO use getter
   get currency() {
-    var curr = this.playerInfo.sessionData.currency
+    var curr = this.playerInfo.sessionData.currencies
     curr.map(obj => {
       console.log(`[+] Currency (${obj.type}): {${storage}}`)
     })
