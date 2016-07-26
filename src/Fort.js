@@ -191,7 +191,8 @@ class Checkpoint extends Fort {
       console.log('[+] To far away, cant search thisone')
       return false
     }
-    if (fort.cooldown !== null){
+
+    if (this.cooldown !== null){
       console.log('[+] Cooldown active, please wait..')
       return false
     }
