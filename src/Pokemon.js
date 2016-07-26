@@ -39,9 +39,6 @@ class Pokemon {
       }
     }])
 
-    let pokemon = res.EncounterResponse.wild_pokemon
-    this.encounter_id = pokemon.encounter_id
-    this.spawn_point_id = pokemon.spawn_point_id
     return res
   }
 
@@ -75,8 +72,7 @@ class Pokemon {
         }
     }
 
-    console.log("Caught!")
-
+    console.log("Caught!")å
     this.isCatching = false
 
     return res

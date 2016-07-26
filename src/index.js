@@ -60,6 +60,7 @@ class PokemonGOAPI {
 
   async GetPlayer() {
     let res = await this.Call([{ request: 'GET_PLAYER' }])
+    this.player.playerInfo.sessionData = res.GetPlayerResponse.player_data
     return res.GetPlayerResponse.player_data
   }
 
@@ -114,14 +115,6 @@ class PokemonGOAPI {
 
     return cells
   }
-
-  UseItemPotion(item_id, pokemon_id = mandatory()) {
-    return this.Call([{
-      request: 'USE_ITEM_POTION',
-      message: { item_id, pokemon_id }
-    }])
-  }
-
 
 }
 

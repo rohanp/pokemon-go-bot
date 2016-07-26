@@ -26,11 +26,11 @@ See /example folder
 - [X] Catch Pokemon automatically
 - [ ] Drop items when bag is full
 - [ ] Scan your inventar for XYZ CP pokemon and release them
-- [ ] Pokemon catch filter
+- [X] Pokemon catch filter
 - [ ] Hatch eggs
-- [ ] Incubate eggs
-- [ ] Evolve pokemons
-- [ ] Use candy
+- [X] Incubate eggs
+- [X] Evolve pokemons
+- [X] Use candy
 - [x] Clean code
 - [ ] Fully automate this script
 
