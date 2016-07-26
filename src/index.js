@@ -17,6 +17,23 @@ function mandatory() {
     throw new Error('Missing parameter');
 }
 
+
+/**
+ * Called to sort objects in array by a value
+ */
+function dynamicSort(property) {
+  var sortOrder = 1;
+  if(property[0] === "-") {
+    sortOrder = -1;
+    property = property.substr(1);
+  }
+  return function (a,b) {
+    var result = (a[property] < b[property]) ? -1 : (a[property] > b[property]) ? 1 : 0;
+    return result * sortOrder;
+  }
+}
+
+
 class PokemonGOAPI {
 
   constructor(props) {
@@ -27,6 +44,8 @@ class PokemonGOAPI {
     this.debug = true
     this.useHeartBeat = false
   }
+
+
 
   async login(username, password, provider) {
 
@@ -64,6 +83,20 @@ class PokemonGOAPI {
     return res.GetPlayerResponse.player_data
   }
 
+
+  async ToggleWalkToPoint(lat,lng){
+    this.walkToPoint = !this.walkToPoint
+    this._walkToPoint(lat,lng)
+    return this.walkToPoint
+  }
+  async _walkToPoint(lat,lng) {
+    while(this.walkToPoint){
+      this.player.walkToPoint(lat,lng)
+      await new Promise(resolve => setTimeout(resolve, 2700))
+    }
+  }
+
+
   //
   // HeartBeat
   //
@@ -96,24 +129,54 @@ class PokemonGOAPI {
 
     let cells = res.GetMapObjectsResponse.map_cells
 
+    var objects={
+      spawn_points:[],
+      deleted_objects:[],
+      fort_summaries:[],
+      decimated_spawn_points:[],
+      wild_pokemons:[],
+      catchable_pokemons:[],
+      nearby_pokemons:[],
+      forts:{
+        checkpoints:[],
+        gyms:[],
+      }
+    }
+
     for(let cell of cells) {
 
-      cell.catchable_pokemons = cell.catchable_pokemons.map(pokemon =>
-        new Pokemon(pokemon, this)
-      )
+      objects.s2_cell_id = cell.s2_cell_id.toString()
+      objects.current_timestamp_ms = cell.current_timestamp_ms.toString()
+      objects.spawn_points.push(cell.spawn_points)
+      objects.deleted_objects.push(cell.deleted_objects)
+      objects.is_truncated_list = false
+      objects.fort_summaries.push(cell.fort_summaries.map(sum => sum))
+      objects.decimated_spawn_points.push(cell.decimated_spawn_points.map(dec => dec))
 
-      cell.forts = cell.forts.map(fort =>
-        new Fort(fort, this)
+      cell.wild_pokemons.map(pokemon =>
+        objects.wild_pokemons.push(new Pokemon(pokemon, this))
       )
-
-      cell.nearby_pokemons = cell.nearby_pokemons.map(pokemon =>
-        new Pokemon(pokemon, this)
+      cell.catchable_pokemons.map(pokemon =>
+        objects.catchable_pokemons.push(new Pokemon(pokemon, this))
       )
-
+      cell.nearby_pokemons.map(pokemon =>
+        objects.nearby_pokemons.push(new Pokemon(pokemon, this))
+      )
+      cell.forts.map(fort => {
+        fort = Fort(fort, this)
+        if (fort.isCheckpoint)
+          objects.forts.checkpoints.push(fort)
+        else
+          objects.forts.gyms.push(fort)
+        }
+      )
+      //sort checkpoints
+      objects.forts.checkpoints.sort(dynamicSort("distance"));
+      objects.forts.gyms.sort(dynamicSort("distance"));
     }
-    this.player.surroundings = cells
+    this.player.surroundings = objects
 
-    return cells
+    return objects
   }
 
 }

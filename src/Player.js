@@ -104,7 +104,6 @@ class Player {
     }
 
     this.location = destination
-
     console.log(`[i] We just walked ${distance} meters`)
   }
 
@@ -147,11 +146,15 @@ class Player {
       console.log(`[i] Walked to specified distance`)
       return true
     } else {
+<<<<<<< HEAD
 
       this.location  = newLocation
       console.log(`[i] Walking closer to [`+lat+`,`+long+`] - distance is: ${distance} meters`)
       await new Promise(resolve => setTimeout(resolve, 2000))
       await this.walkToPoint(lat, long)
+=======
+      console.log(`[i] Walked closer to [`+lat+`,`+long+`] - distance is now: ${distance} meters`)
+>>>>>>> b19f766e9f33d8e45d186378dbba2eeb2d3cf3e8
     }
   }
 
@@ -188,15 +191,6 @@ class Player {
         device_model: "SM-G920F",
         locale: "en-GB",
         app_version: 293,
-      }
-    }])
-  }
-
-  remoteConfigVersion() {
-    return this.parent.Call([{
-      request: 'GET_PLAYER_PROFILE',
-      message: {
-        player_name: this.sessionData.username
       }
     }])
   }

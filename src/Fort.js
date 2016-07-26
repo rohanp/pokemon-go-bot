@@ -184,10 +184,19 @@ class Checkpoint extends Fort {
    *
    * @return {[type]} [description]
    */
-  search() {
+  async search() {
     let {latitude, longitude} = this.parent.player.location
 
-    return this.parent.Call([{
+    if (this.distance > 39){
+      console.log('[+] To far away, cant search thisone')
+      return false
+    }
+    if (fort.cooldown !== null){
+      console.log('[+] Cooldown active, please wait..')
+      return false
+    }
+
+    var search = await this.parent.Call([{
       request: 'FORT_SEARCH',
       message: {
         fort_id: this.id,
@@ -197,8 +206,8 @@ class Checkpoint extends Fort {
         fort_longitude: this.longitude
       }
     }])
-
-    // TODO: update the cooldown?
+    console.log('[+] Search complete')
+    return search
   }
 }
 
