@@ -1,5 +1,6 @@
 import Player from '~/Player'
 import API from '~/API'
+import Item from '~/Item'
 import Pokemon from '~/Pokemon'
 import Fort from '~/Fort'
 import PlayerMap from '~/PlayerMap'
@@ -68,13 +69,34 @@ class PokemonGOAPI {
     return this.api.Request(req, this.player.playerInfo)
   }
 
-  GetInventory() {
-    return this.Call([{
+ async GetInventory() {
+    let InventoryResponse = await this.Call([{
       request: 'GET_INVENTORY',
       message: {
         last_timestamp_ms: 0
       }
     }])
+    let inventory = {
+      pokemons: [],
+      items: [],
+      eggs: [],
+      candies: [],
+    };
+    InventoryResponse.GetInventoryResponse.inventory_delta.inventory_items.map(thing => {
+      if(thing.inventory_item_data.pokemon_data) {
+        if (thing.inventory_item_data.pokemon_data.is_egg) {
+          inventory.eggs.push(new Pokemon(thing.inventory_item_data.pokemon_data, this));
+        } else {
+          inventory.pokemons.push(new Pokemon(thing.inventory_item_data.pokemon_data, this));
+        }
+      } else if(thing.inventory_item_data.item) {
+        inventory.items.push(new Item(thing.inventory_item_data.item,this))
+      }
+      else if(thing.inventory_item_data.pokemon_family ) {
+        inventory.candies.push(new Item(thing.inventory_item_data.pokemon_family ,this))
+      }
+    });
+    return inventory;
   }
 
   async GetPlayer() {
