@@ -1,7 +1,6 @@
 {
   "name": "pokemongo-api",
   "description": "Pokemon Go API",
-  "version": "0.0.0-semantic-release",
   "main": "dist/index.js",
   "scripts": {
     "compile": "babel --presets es2015,stage-0 -d dist/ src/",

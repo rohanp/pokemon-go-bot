@@ -100,9 +100,7 @@ class Player {
     }
 
     let distance = geolib.getDistance(this.location, destination)
-
     this.location = destination
-
     console.log(`[i] We just walked ${distance} meters`)
   }
 
@@ -169,15 +167,6 @@ class Player {
         device_model: "SM-G920F",
         locale: "en-GB",
         app_version: 293,
-      }
-    }])
-  }
-
-  remoteConfigVersion() {
-    return this.parent.Call([{
-      request: 'GET_PLAYER_PROFILE',
-      message: {
-        player_name: this.sessionData.username
       }
     }])
   }
