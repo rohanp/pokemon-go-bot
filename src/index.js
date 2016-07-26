@@ -149,7 +149,6 @@ class PokemonGOAPI {
       )
       cell.forts.map(fort => {
         fort = Fort(fort, this)
-        fort.lastDistance = fort.distance
         if (fort.isCheckpoint)
           objects.forts.checkpoints.push(fort)
         else
@@ -157,10 +156,10 @@ class PokemonGOAPI {
         }
       )
       //sort checkpoints
-      objects.forts.checkpoints.sort(dynamicSort("lastDistance"));
-      objects.forts.gyms.sort(dynamicSort("lastDistance"));
+      objects.forts.checkpoints.sort(dynamicSort("distance"));
+      objects.forts.gyms.sort(dynamicSort("distance"));
     }
-    this.player.surroundings = cells
+    this.player.surroundings = objects
 
     return objects
   }
