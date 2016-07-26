@@ -6,23 +6,19 @@ var pokedexMap = new Map();
 for(let p of pokedex.pokemon)
   pokedexMap.set(p.id, p)
 
+/**
+ * [class description]
+ */
 class Pokemon {
   constructor(props, parent) {
     Object.assign(this, props, pokedexMap.get(props.pokemon_id))
+    Object.defineProperty(this, 'parent', {value: parent})
 
     delete this.id
     this.catchable = !props.distance_in_meters
-
-    if(this.catchable)
-      console.log(`[i] found ${this.name}. Direction: ${this.direction}`)
-
-    this.parent = parent
   }
 
-  get direction() {
-    let google = 'https://www.google.com/maps/dir/Current+Location/'
-    return google + `${this.latitude},${this.longitude}`
-  }
+
 
   /**
    * Return the coordinates of the pokemon
@@ -35,6 +31,12 @@ class Pokemon {
     }
   }
 
+
+
+  /**
+   * [encounter description]
+   * @return {[type]} [description]
+   */
   async encounter() {
     let {latitude, longitude} = this.parent.player.location
 
@@ -53,9 +55,15 @@ class Pokemon {
     return res
   }
 
+
+
+  /**
+   * [catch description]
+   * @param  {[type]} pokeball [description]
+   * @return {[type]}          [description]
+   */
   async catch(pokeball) {
-    // var status = ['Unexpected error', 'Successful catch', 'Catch Escape', 'Catch Flee', 'Missed Catch']
-    var res = await this.parent.Call([{
+    let res = await this.parent.Call([{
       request: 'CATCH_POKEMON',
       message: {
         encounter_id: this.encounter_id,
@@ -67,23 +75,69 @@ class Pokemon {
         normalized_hit_position: 1.0,
       }
     }])
-    // console.log(status[res.CatchPokemonResponse.status])
+
+    // TODO: Try again if it fails?
+    // Need to figure out why we get an error first
+    /*
+    let status = res.CatchPokemonResponse.status
+    // ['Unexpected error', 'Successful catch', 'Catch Escape', 'Catch Flee', 'Missed Catch']
+
+    if(status == 2 || status == 4)
+      return this.catch(pokeball)
+    */
 
     this.isCatching = false
 
     return res
   }
 
+
+
+  /**
+   * Gives a berry to the pokemon before
+   * trying to catch it. Dose making it esier to catch
+   *
+   * Note that you can only feed it once.
+   * Giving it twice don't make any diffrent
+   *
+   * @return {[type]} [description]
+   */
+  async feed() { // name the function to something matching the request?
+    return console.warn('not done yet')
+
+    if(this.isCatching)
+      throw new Error('Can only feed berries to pokemon you have encounter')
+
+    // TODO
+    let res = await this.parent.Call([{
+      request: '???'
+    }])
+  }
+
+
+
+  /**
+   * [encounterAndCatch description]
+   * @param  {[type]} pokeball [description]
+   * @return {[type]}          [description]
+   */
   async encounterAndCatch(pokeball) {
     this.isCatching = true
-    var pok = await this.encounter()
-    // todo.. add a little timer here?
-    var result = await this.catch(pokeball)
+    let pok = await this.encounter()
+    // TODO: add a little timer here?
+    // TODO: use berry?
+    let result = await this.catch(pokeball)
     this.isCatching = false
 
     return result
   }
 
+
+
+  /**
+   * [release description]
+   * @return {[type]} [description]
+   */
   release() {
     return this.parent.Call([{
       request: 'RELEASE_POKEMON',
@@ -93,6 +147,12 @@ class Pokemon {
     }])
   }
 
+
+
+  /**
+   * [envolve description]
+   * @return {[type]} [description]
+   */
   envolve() {
     return this.parent.Call([{
       request: 'EVOLVE_POKEMON',
@@ -102,6 +162,12 @@ class Pokemon {
     }])
   }
 
+
+
+  /**
+   * [upgrade description]
+   * @return {[type]} [description]
+   */
   upgrade() {
     return this.parent.Call([{
       request: 'UPGRADE_POKEMON',
@@ -111,6 +177,11 @@ class Pokemon {
     }])
   }
 
+
+
+  /**
+   * [setFavorite description]
+   */
   setFavorite() {
     return this.parent.Call([{
       request: 'SET_FAVORITE_POKEMON',
@@ -121,6 +192,13 @@ class Pokemon {
     }])
   }
 
+
+
+  /**
+   * [nickname description]
+   * @param  {[type]} name [description]
+   * @return {[type]}      [description]
+   */
   nickname(name) {
     return this.parent.Call([{
       request: 'NICKNAME_POKEMON',

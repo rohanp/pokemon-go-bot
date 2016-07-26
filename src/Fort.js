@@ -15,6 +15,7 @@ class Fort {
   }
 
 
+
   /**
    * Return the coordinates of the fort
    * @return {Object} {latitude, longitude}
@@ -182,7 +183,7 @@ class Checkpoint extends Fort {
    * search spins the pokestop
    * you get pokemon balls among other things
    *
-   * @return {[type]} [description]
+   * @return {Promise} Resolves to items awarded
    */
   async search() {
     let {latitude, longitude} = this.parent.player.location
