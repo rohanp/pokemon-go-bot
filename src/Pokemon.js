@@ -24,6 +24,17 @@ class Pokemon {
     return google + `${this.latitude},${this.longitude}`
   }
 
+  /**
+   * Return the coordinates of the pokemon
+   * @return {Object} {latitude, longitude}
+   */
+  get location() {
+    return {
+        latitude: this.latitude,
+        longitude: this.longitude
+    }
+  }
+
   async encounter() {
     let {latitude, longitude} = this.parent.player.location
 
@@ -43,6 +54,7 @@ class Pokemon {
   }
 
   async catch(pokeball) {
+    // var status = ['Unexpected error', 'Successful catch', 'Catch Escape', 'Catch Flee', 'Missed Catch']
     var res = await this.parent.Call([{
       request: 'CATCH_POKEMON',
       message: {
@@ -55,6 +67,8 @@ class Pokemon {
         normalized_hit_position: 1.0,
       }
     }])
+    // console.log(status[res.CatchPokemonResponse.status])
+
     this.isCatching = false
 
     return res

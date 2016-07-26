@@ -129,51 +129,54 @@ class PokemonGOAPI {
 
     let cells = res.GetMapObjectsResponse.map_cells
 
-    var objects={
-      spawn_points:[],
-      deleted_objects:[],
-      fort_summaries:[],
-      decimated_spawn_points:[],
-      wild_pokemons:[],
-      catchable_pokemons:[],
-      nearby_pokemons:[],
-      forts:{
-        checkpoints:[],
-        gyms:[],
+    var objects = {
+      spawn_points: [],
+      deleted_objects: [],
+      fort_summaries: [],
+      decimated_spawn_points: [],
+      wild_pokemons: [],
+      catchable_pokemons: [],
+      nearby_pokemons: [],
+      forts: {
+        checkpoints: [],
+        gyms: [],
       }
     }
 
     for(let cell of cells) {
-
-      objects.s2_cell_id = cell.s2_cell_id.toString()
-      objects.current_timestamp_ms = cell.current_timestamp_ms.toString()
       objects.spawn_points.push(cell.spawn_points)
       objects.deleted_objects.push(cell.deleted_objects)
-      objects.is_truncated_list = false
-      objects.fort_summaries.push(cell.fort_summaries.map(sum => sum))
-      objects.decimated_spawn_points.push(cell.decimated_spawn_points.map(dec => dec))
+      objects.fort_summaries.push(cell.fort_summaries)
+      objects.decimated_spawn_points.push(cell.decimated_spawn_points)
 
-      cell.wild_pokemons.map(pokemon =>
+      cell.wild_pokemons.map(pokemon => {
+        pokemon.pokemon_id = pokemon.pokemon_data.pokemon_id,
         objects.wild_pokemons.push(new Pokemon(pokemon, this))
-      )
+      })
+
       cell.catchable_pokemons.map(pokemon =>
         objects.catchable_pokemons.push(new Pokemon(pokemon, this))
       )
+
       cell.nearby_pokemons.map(pokemon =>
         objects.nearby_pokemons.push(new Pokemon(pokemon, this))
       )
+
       cell.forts.map(fort => {
         fort = Fort(fort, this)
+
         if (fort.isCheckpoint)
           objects.forts.checkpoints.push(fort)
         else
           objects.forts.gyms.push(fort)
         }
       )
+
       //sort checkpoints
       objects.forts.checkpoints.sort(dynamicSort("distance"));
       objects.forts.gyms.sort(dynamicSort("distance"));
     }
+
     this.player.surroundings = objects
 
     return objects
