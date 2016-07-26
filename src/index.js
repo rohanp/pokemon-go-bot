@@ -80,7 +80,7 @@ class PokemonGOAPI {
       pokemons: [],
       items: [],
       eggs: [],
-      candy: [],
+      candies: [],
     };
     InventoryResponse.GetInventoryResponse.inventory_delta.inventory_items.map(thing => {
       if(thing.inventory_item_data.pokemon_data) {
