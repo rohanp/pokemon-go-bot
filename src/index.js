@@ -80,6 +80,7 @@ class PokemonGOAPI {
       pokemons: [],
       items: [],
       eggs: [],
+      candy: [],
     };
     InventoryResponse.GetInventoryResponse.inventory_delta.inventory_items.map(thing => {
       if(thing.inventory_item_data.pokemon_data) {
@@ -90,6 +91,9 @@ class PokemonGOAPI {
         }
       } else if(thing.inventory_item_data.item) {
         inventory.items.push(new Item(thing.inventory_item_data.item,this))
+      }
+      else if(thing.inventory_item_data.pokemon_family ) {
+        inventory.candies.push(new Item(thing.inventory_item_data.pokemon_family ,this))
       }
     });
     return inventory;
