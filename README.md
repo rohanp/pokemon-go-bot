@@ -1,4 +1,5 @@
-# pokemongo-api
+# pokemongo-api [![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
+
 Pokemon Go API for nodejs
 
 
