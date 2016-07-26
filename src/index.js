@@ -115,14 +115,6 @@ class PokemonGOAPI {
     return cells
   }
 
-  UseItemPotion(item_id, pokemon_id = mandatory()) {
-    return this.Call([{
-      request: 'USE_ITEM_POTION',
-      message: { item_id, pokemon_id }
-    }])
-  }
-
-
 }
 
 export default PokemonGOAPI
