@@ -62,7 +62,18 @@ class Pokemon {
                 normalized_hit_position: 1.0,
               }
             }])
-            break
+
+						var status = res.CatchPokemonResponse.status
+						if (status == 1 || status == 3 || status == 0)
+            	break
+						/* CatchStatus {
+							CATCH_ERROR = 0;
+							CATCH_SUCCESS = 1;
+							CATCH_ESCAPE = 2;
+							CATCH_FLEE = 3;
+							CATCH_MISSED = 4;
+						} */
+
         } catch (error){
             console.log("Failed to catch. Trying again...")
             if (7 < i){
