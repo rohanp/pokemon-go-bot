@@ -6,15 +6,24 @@ var pokedexMap = new Map();
 for(let p of pokedex.pokemon)
   pokedexMap.set(p.id, p)
 
+
+var	getPokedexEntry = function(pokemon_id) {
+	   let pokemon = pokedexMap.get(pokemon_id);
+	   if (pokemon) {
+	     delete pokemon.id;
+	   }
+	   return pokemon;
+
+	 }
+
 /**
  * [class description]
  */
 class Pokemon {
   constructor(props, parent) {
-    Object.assign(this, props, pokedexMap.get(props.pokemon_id))
+    Object.assign(this, props, getPokedexEntry(props.pokemon_id))
     Object.defineProperty(this, 'parent', {value: parent})
 
-    delete this.id
     this.catchable = !props.distance_in_meters
   }
 
@@ -42,14 +51,17 @@ class Pokemon {
 
     this.isCatching = true
 
-		const ENCOUNTER_ERROR = 0
-		const ENCOUNTER_SUCCESS = 1
-		const ENCOUNTER_NOT_FOUND = 2
-		const ENCOUNTER_CLOSED = 3
-		const ENCOUNTER_POKEMON_FLED = 4
-		const ENCOUNTER_NOT_IN_RANGE = 5
-		const ENCOUNTER_ALREADY_HAPPENED = 6
-		const POKEMON_INVENTORY_FULL = 7
+		const Status = Object.freeze({
+	    ERROR: 0,
+	    SUCCESS: 1,
+			NOT_FOUND: 2,
+			CLOSED: 3,
+			POKEMON_FLED: 4,
+			NOT_IN_RANGE: 5,
+			ALREADY_HAPPENED: 6,
+			INVENTORY_FULL: 7
+
+		})
 
     let res = await this.parent.Call([{
       request: 'ENCOUNTER',
@@ -61,7 +73,7 @@ class Pokemon {
       }
     }])
 
-		if (res.EncounterResponse.status == POKEMON_INVENTORY_FULL){
+		if (res.EncounterResponse.status == Status.INVENTORY_FULL){
 			console.log("[!][!][!] Pokemon Inventory Full!!")
 		}
 
@@ -69,6 +81,14 @@ class Pokemon {
   }
 
   async catch(items) {
+
+		const Status = Object.freeze({
+	    ERROR: 0,
+	    SUCCESS: 1,
+			ESCAPE: 2,
+			FLEE: 3,
+			MISSED: 4
+		})
 
 		const CATCH_ERROR = 0;
 		const CATCH_SUCCESS = 1;
@@ -103,9 +123,9 @@ class Pokemon {
 						var status = res.CatchPokemonResponse.status
 						console.log("[i] Catch Response: " + map[status])
 
-						if (status == CATCH_SUCCESS ||
-							  status == CATCH_FLEE ||
-								status == CATCH_ERROR)
+						if (status == Status.SUCCESS ||
+							  status == Status.FLEE ||
+								status == STatus.CATCH_ERROR)
             	break
 
         } catch (error){
@@ -172,13 +192,15 @@ class Pokemon {
    * [release description]
    * @return {[type]} [description]
    */
-  release() {
-    return this.parent.Call([{
+  async release() {
+    let res = await this.parent.Call([{
       request: 'RELEASE_POKEMON',
       message: {
-        pokemon_id: this.pokemon_id,
+        pokemon_id: this.id,
       }
     }])
+
+		return res
   }
 
 
@@ -187,7 +209,7 @@ class Pokemon {
    * [envolve description]
    * @return {[type]} [description]
    */
-  envolve() {
+  evolve() {
     return this.parent.Call([{
       request: 'EVOLVE_POKEMON',
       message: {
