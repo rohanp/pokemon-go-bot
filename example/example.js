@@ -11,19 +11,27 @@ var lng = process.env.LONGITUDE || -73.984472
 
 
 const Poke = new PokeAPI()
-
 // The kind of ball you want to use when captureing
-const POKE_BALL = 1;
-const GREAT_BALL = 2;
-const ULTRA_BALL = 3;
-const MASTER_BALL = 4;
+
+/**
+ * get the best ball from the {Inventory.items}
+ *
+ * @param  {Object} items That comes from the Inventory
+ * @return {Item}         The best ball you can use
+ */
+function getBestBall(items) {
+  return items.master_ball.count && items.master_ball ||
+  items.ultra_ball.count && items.ultra_ball ||
+  items.great_ball.count && items.great_ball ||
+  items.poke_ball.count && items.poke_ball
+}
 
 async function init() {
 
   //set player location
   Poke.player.location = {
     latitude: parseFloat(lat),
-    longitude: parseFloat(lng),
+    longitude: parseFloat(lng)
   }
 
   //login
@@ -31,15 +39,32 @@ async function init() {
 
   // just update the profile...
   let player = await Poke.GetPlayer()
-  // let inv = await Poke.GetInventory()
-  // console.log(inv)
+  let inventory = await Poke.GetInventory()
+  let {items} = inventory
+
   // get map objects..
   while( true ) {
     let objects = await Poke.GetMapObjects()
 
     // catchable pokemons from here?
     for (let pokemon of objects.catchable_pokemons) {
-      // await pokemon.encounterAndCatch(POKE_BALL).catch(console.error)
+      /*
+      // Get the best ball to use agains the pokemon
+      let ball = getBestBall(items)
+
+      // First we need to encounter the pokemon
+      await pokemon.encounter()
+
+      // Use a razzberry if avalible
+      if (items.razz_berry.count)
+        await items.razz_berry.useCapture(pokemon)
+
+      // Try to catch the pokemon
+      await pokemon.catch(ball.item_id).catch(console.log)
+
+      // Update the count
+      ball.count--
+      */
     }
 
     // wild pokemons

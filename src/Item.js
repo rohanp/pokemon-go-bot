@@ -40,19 +40,24 @@ class Item {
 
 
   /**
-   * [useCapture description]
-   * @param  {[type]} pokemon [description]
+   * Gives a berry to the pokemon you are trying to captureing
+   * And lowers the count by one
+   *
+   * @param  {[type]} pokemon A catchable pokemon
    * @return {[type]}         [description]
    */
-  useCapture(pokemon) {
-    return this.parent.Call([{
+  async useCapture(pokemon) {
+    let res = await this.parent.Call([{
       request: 'USE_ITEM_CAPTURE',
       message: {
         item_id: this.item_id,
         encounter_id: pokemon.encounter_id,
-        spawn_point_guid: pokemon.spawn_point_guid,
+        spawn_point_guid: pokemon.spawn_point_id,
       }
     }])
+
+    this.count--
+    return res
   }
 
 
