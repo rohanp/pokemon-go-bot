@@ -24,7 +24,7 @@ class Player {
       sessionData: {},
     }
     this.Auth = new Auth()
-		this.lastStep = [-1e-4, -1e-4]
+		this.lastDirection = [-1e-4, -1e-4]
   }
 
   set provider(provider) {
@@ -87,7 +87,7 @@ class Player {
     return this.playerInfo
 }
 
-  walkAround(origin){
+  async walkAround(origin){
 
 		function dot(x1, x2, y1, y2){
 			return x1*y1 + x2*y2
@@ -97,9 +97,10 @@ class Player {
 			var randlat = randrange(2e-4)
 	    var randlong = randrange(2e-4)
 
-		} while ( dot(randlat, randlong, ...this.lastStep) < 0)
+		} while ( dot(randlat, randlong, ...this.lastDirection) < 0)
 
-		this.lastStep = [randlat, randlong]
+		if (Math.random() < 0.25)
+			this.lastStep = [randlat, randlong]
 
 		let destination = {
 		 latitude: this.location.latitude + randlat,
@@ -110,11 +111,10 @@ class Player {
 
     if (distance > 300){
         console.log("I've wandered off! Heading back to origin...")
-        this.walkToPoint(...origin)
+        await this.walkToPoint(...origin)
     }
 
     this.location = destination
-    console.log(`[i] We just walked ${distance} meters`)
   }
 
   async walkToPoint(lat, long){
@@ -157,7 +157,7 @@ class Player {
 
     } else {
       this.location  = newLocation
-      console.log(`[i] Walking closer to [`+lat+`,`+long+`] - distance is: ${distance} meters`)
+      console.log(`[i] Walking to pokestop: ${distance} m away`)
       await new Promise(resolve => setTimeout(resolve, 2000))
       await this.walkToPoint(lat, long)
     }

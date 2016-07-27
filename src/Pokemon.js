@@ -62,14 +62,13 @@ class Pokemon {
     }])
 
 		if (res.EncounterResponse.status == POKEMON_INVENTORY_FULL){
-			console.log("--- ERROR: Pokemon Inventory Full!!")
+			console.log("[!][!][!] Pokemon Inventory Full!!")
 		}
 
     return res
   }
 
-<<<<<<< HEAD
-  async catch() {
+  async catch(items) {
 
 		const CATCH_ERROR = 0;
 		const CATCH_SUCCESS = 1;
@@ -77,20 +76,21 @@ class Pokemon {
 		const CATCH_FLEE = 3;
 		const CATCH_MISSED = 4;
 
-		var map = ["", "CATCH_ERROR", "CATCH_SUCCESS", "CATCH_ESCAPE",
+		var map = ["CATCH_ERROR", "CATCH_SUCCESS", "CATCH_ESCAPE",
 							 "CATCH_FLEE", "CATCH_MISSED"]
 
     var res;
 
     for(let i of Array(10)){
-        var pokeball_ = 1 // pokeball
+
+        var ball = Math.random() > .25 ? items.poke_ball : items.great_ball
 
         try{
             res = await this.parent.Call([{
               request: 'CATCH_POKEMON',
               message: {
                 encounter_id: this.encounter_id,
-                pokeball: pokeball_,
+                pokeball: ball.item_id,
                 normalized_reticle_size: Math.min(1.95, rand.rnorm(1.9, 0.05)),
                 spawn_point_guid: this.spawn_point_id,
                 hit_pokemon: true,
@@ -98,9 +98,9 @@ class Pokemon {
                 normalized_hit_position: 1.0,
               }
             }])
+						ball.count -= 1
 
 						var status = res.CatchPokemonResponse.status
-
 						console.log("[i] Catch Response: " + map[status])
 
 						if (status == CATCH_SUCCESS ||
@@ -108,16 +108,14 @@ class Pokemon {
 								status == CATCH_ERROR)
             	break
 
-						if (status == CATCH_ESCAPE && Math.Random() > 0.5)
-							pokeball_ = 2 // great ball
-
         } catch (error){
-            console.log("Failed to catch. Trying again...")
-            if (7 < i){
-                console.log("Whipping out the GreatBall")
-                pokeball_ = 2 // great ball
-            }
+            console.log("[!] Failed to catch. Trying again...")
         }
+
+				if (3 < i){
+						console.log("Whipping out the GreatBall")
+						ball = items.great_ball // great ball
+				}
     }
 
     this.isCatching = false
@@ -148,19 +146,21 @@ class Pokemon {
     }])
   }
 
-
-
   /**
    * [encounterAndCatch description]
    * @param  {[type]} pokeball [description]
    * @return {[type]}          [description]
    */
-  async encounterAndCatch(pokeball) {
+  async encounterAndCatch(items) {
     this.isCatching = true
     let pok = await this.encounter()
-    // TODO: add a little timer here?
+
+		console.log("[!] Encountered a " + pokedexMap.get(this.pokemon_id).name)
+
+		await new Promise(resolve => setTimeout(resolve, 100))
+
     // TODO: use berry?
-    let result = await this.catch(pokeball)
+    let result = await this.catch(items)
     this.isCatching = false
 
     return result
