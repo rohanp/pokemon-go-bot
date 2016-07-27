@@ -29,6 +29,15 @@ class Pokemon {
 
     this.isCatching = true
 
+		const ENCOUNTER_ERROR = 0
+		const ENCOUNTER_SUCCESS = 1
+		const ENCOUNTER_NOT_FOUND = 2
+		const ENCOUNTER_CLOSED = 3
+		const ENCOUNTER_POKEMON_FLED = 4
+		const ENCOUNTER_NOT_IN_RANGE = 5
+		const ENCOUNTER_ALREADY_HAPPENED = 6
+		const POKEMON_INVENTORY_FULL = 7
+
     let res = await this.parent.Call([{
       request: 'ENCOUNTER',
       message: {
@@ -39,15 +48,32 @@ class Pokemon {
       }
     }])
 
+		if (res.EncounterResponse.status == POKEMON_INVENTORY_FULL){
+			console.log("--- ERROR: Pokemon Inventory Full!!")
+		}
+
     return res
   }
 
   async catch() {
 
+		const CATCH_ERROR = 0;
+		const CATCH_SUCCESS = 1;
+		const CATCH_ESCAPE = 2;
+		const CATCH_FLEE = 3;
+		const CATCH_MISSED = 4;
+
+		var map = new Map()
+		map.set(0 , "CATCH_ERROR")
+		map.set(1 , "CATCH_SUCCESS")
+		map.set(2 , "CATCH_ESCAPE")
+		map.set(3 , "CATCH_FLEE")
+		map.set(4 , "CATCH_MISSED")
+
     var res;
 
     for(let i of Array(10)){
-        var pokeball_ = 1
+        var pokeball_ = 1 // pokeball
 
         try{
             res = await this.parent.Call([{
@@ -64,26 +90,27 @@ class Pokemon {
             }])
 
 						var status = res.CatchPokemonResponse.status
-						if (status == 1 || status == 3 || status == 0)
+
+						console.log("[i] Catch Response: " + map.get(status))
+
+						if (status == CATCH_SUCCESS ||
+							  status == CATCH_FLEE ||
+								status == CATCH_ERROR)
             	break
-						/* CatchStatus {
-							CATCH_ERROR = 0;
-							CATCH_SUCCESS = 1;
-							CATCH_ESCAPE = 2;
-							CATCH_FLEE = 3;
-							CATCH_MISSED = 4;
-						} */
+
+						if (status == CATCH_ESCAPE && Math.Random() > 0.5)
+							pokeball_ = 2 // great ball
 
         } catch (error){
             console.log("Failed to catch. Trying again...")
             if (7 < i){
-                console.log("Whipping out the MasterBall")
-                pokeball_ = 2
+                console.log("Whipping out the GreatBall")
+                pokeball_ = 2 // great ball
             }
         }
     }
 
-    console.log("Caught!")
+
     this.isCatching = false
 
     return res

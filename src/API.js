@@ -32,7 +32,7 @@ class Connection {
       var Responses = POGOProtos.Networking.Responses
       try {
         respt[ResponseType] = Responses[ResponseType].decode(res.returns[key])
-        console.log('[i] Received OK: '+ResponseType)
+        // console.log('[i] Received OK: '+ResponseType)
       } catch(error) {
         console.log('[!] Response error!')
         throw new Error('Response error!')

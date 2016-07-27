@@ -24,6 +24,7 @@ class Player {
       sessionData: {},
     }
     this.Auth = new Auth()
+		this.lastStep = [-1e-4, -1e-4]
   }
 
   set provider(provider) {
@@ -88,25 +89,33 @@ class Player {
 
   walkAround(origin){
 
-    var randlat = randrange(2e-4)
-    var randlong = randrange(2e-4)
+		function dot(x1, x2, y1, y2){
+			return x1*y1 + x2*y2
+		}
 
-    let destination = {
-      latitude: this.location.latitude + randlat,
-      longitude: this.location.longitude + randlong,
-    }
+		do { // make sure dont go in opposite direction as last step
+			var randlat = randrange(2e-4)
+	    var randlong = randrange(2e-4)
+
+		} while ( dot(randlat, randlong, ...this.lastStep) < 0)
+
+		this.lastStep = [randlat, randlong]
+
+		let destination = {
+		 latitude: this.location.latitude + randlat,
+		 longitude: this.location.longitude + randlong
+		 }
 
     let distance = geolib.getDistance(this.location, origin)
 
     if (distance > 300){
         console.log("I've wandered off! Heading back to origin...")
-        walkToPoint(...origin)
+        this.walkToPoint(...origin)
     }
 
     this.location = destination
     console.log(`[i] We just walked ${distance} meters`)
   }
-
 
   async walkToPoint(lat, long){
 
