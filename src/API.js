@@ -194,4 +194,6 @@ class Connection {
 
 }
 
+Connection.POGOProtos = POGOProtos
+
 export default Connection

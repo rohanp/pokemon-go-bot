@@ -1,11 +1,10 @@
 import Player from '~/Player'
 import API from '~/API'
+import Item from '~/Item'
 import Pokemon from '~/Pokemon'
 import Fort from '~/Fort'
 import PlayerMap from '~/PlayerMap'
-import {
-  BANNED_POKEMONS
-} from './settings'
+import { BANNED_POKEMONS } from './settings'
 
 import rand from 'randgen'
 
@@ -22,14 +21,14 @@ function mandatory() {
  * Called to sort objects in array by a value
  */
 function dynamicSort(property) {
-  var sortOrder = 1;
-  if(property[0] === "-") {
-    sortOrder = -1;
-    property = property.substr(1);
+  let sortOrder = 1
+  if (property[0] === '-') {
+    sortOrder = -1
+    property = property.substr(1)
   }
-  return function (a,b) {
-    var result = (a[property] < b[property]) ? -1 : (a[property] > b[property]) ? 1 : 0;
-    return result * sortOrder;
+  return (a,b) => {
+    let result = (a[property] < b[property]) ? -1 : (a[property] > b[property]) ? 1 : 0
+    return result * sortOrder
   }
 }
 
@@ -46,9 +45,15 @@ class PokemonGOAPI {
   }
 
 
-
+  /**
+   * [login description]
+   *
+   * @param  {[type]} username [description]
+   * @param  {[type]} password [description]
+   * @param  {[type]} provider [description]
+   * @return {[type]}          [description]
+   */
   async login(username, password, provider) {
-
     if (provider !== 'ptc' && provider !== 'google') {
       throw new Error('Invalid provider')
     }
@@ -61,51 +66,126 @@ class PokemonGOAPI {
     return this
   }
 
-  //
-  //This calls the API direct
-  //
+
+
+  /**
+   * This calls the API direct
+   *
+   * @param  {[type]} req [description]
+   * @return {[type]}     [description]
+   */
   Call(req) {
     return this.api.Request(req, this.player.playerInfo)
   }
 
-  GetInventory() {
-    return this.Call([{
+
+
+  /**
+   * [GetInventory description]
+   * @return {[type]}     [description]
+   */
+  async GetInventory() {
+    let res = await this.Call([{
       request: 'GET_INVENTORY',
       message: {
         last_timestamp_ms: 0
       }
     }])
+
+    let inventory = {
+      pokemons: [],
+      items: {},
+      eggs: [],
+      candies: []
+    }
+
+    var itemData = PokemonGOAPI.POGOProtos.Inventory.ItemId
+    itemData = Object.keys(itemData).reduce((obj, key) => {
+      obj[ itemData[key] ] = key.toLowerCase().replace('item_', '')
+
+      inventory.items[obj[itemData[key]]] = new PokemonGOAPI.POGOProtos.Inventory.Item
+      return obj
+    }, {})
+
+    for(let thing of res.GetInventoryResponse.inventory_delta.inventory_items){
+      let data = thing.inventory_item_data
+
+      if (data.pokemon_data) {
+        let pokemon = new Pokemon(data.pokemon_data, this)
+        data.pokemon_data.is_egg
+          ? inventory.eggs.push(pokemon)
+          : inventory.pokemons.push(pokemon)
+      } else if (data.item) {
+        inventory.items[itemData[data.item.item_id]] = new Item(data.item, this)
+      }
+      else if (data.pokemon_family) {
+        inventory.candies.push(new Item(data.pokemon_family, this))
+      }
+    }
+
+    return inventory
   }
 
-  async GetPlayer() {
+
+
+
+  /**
+   * [GetPlayer description]
+   */
+  async GetPlayer(s) {
     let res = await this.Call([{ request: 'GET_PLAYER' }])
     this.player.playerInfo.sessionData = res.GetPlayerResponse.player_data
     return res.GetPlayerResponse.player_data
   }
 
 
-  async ToggleWalkToPoint(lat,lng){
+
+  /**
+   * [ToggleWalkToPoint description]
+   * @param  {[type]} lat [description]
+   * @param  {[type]} lng [description]
+   * @return {[type]}     [description]
+   */
+  async ToggleWalkToPoint(lat,lng) {
     this.walkToPoint = !this.walkToPoint
-    this._walkToPoint(lat,lng)
+    this._walkToPoint(lat, lng)
     return this.walkToPoint
   }
-  async _walkToPoint(lat,lng) {
+
+
+
+  /**
+   * [_walkToPoint description]
+   *
+   * @private
+   * @param  {[type]} lat [description]
+   * @param  {[type]} lng [description]
+   * @return {[type]}     [description]
+   */
+  async _walkToPoint(lat, lng) {
     while(this.walkToPoint){
-      this.player.walkToPoint(lat,lng)
+      this.player.walkToPoint(lat, lng)
       await new Promise(resolve => setTimeout(resolve, 2700))
     }
   }
 
 
-  //
-  // HeartBeat
-  //
+
+  /**
+   * [ToggleHeartBeat description]
+   */
   async ToggleHeartBeat() {
     this.useHeartBeat = !this.useHeartBeat
     this._loopHeartBeat()
     return this.useHeartBeat
   }
 
+
+
+  /**
+   * [_loopHeartBeat description]
+   * @return {[type]} [description]
+   */
   async _loopHeartBeat() {
     while(this.useHeartBeat){
       var area = this.GetMapObjects()
@@ -114,10 +194,15 @@ class PokemonGOAPI {
     }
   }
 
+
+
+  /**
+   * [GetMapObjects description]
+   */
   async GetMapObjects() {
-    var finalWalk = this.map.getNeighbors(this.player.playerInfo).sort()
-    var nullarray = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
-    var res = await this.Call([{
+    let finalWalk = this.map.getNeighbors(this.player.playerInfo).sort()
+    let nullarray = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+    let res = await this.Call([{
       request: 'GET_MAP_OBJECTS',
       message: {
         cell_id: finalWalk,
@@ -129,56 +214,61 @@ class PokemonGOAPI {
 
     let cells = res.GetMapObjectsResponse.map_cells
 
-    var objects={
-      spawn_points:[],
-      deleted_objects:[],
-      fort_summaries:[],
-      decimated_spawn_points:[],
-      wild_pokemons:[],
-      catchable_pokemons:[],
-      nearby_pokemons:[],
-      forts:{
-        checkpoints:[],
-        gyms:[],
+    var objects = {
+      spawn_points: [],
+      deleted_objects: [],
+      fort_summaries: [],
+      decimated_spawn_points: [],
+      wild_pokemons: [],
+      catchable_pokemons: [],
+      nearby_pokemons: [],
+      forts: {
+        checkpoints: [],
+        gyms: []
       }
     }
 
     for(let cell of cells) {
-
-      objects.s2_cell_id = cell.s2_cell_id.toString()
-      objects.current_timestamp_ms = cell.current_timestamp_ms.toString()
       objects.spawn_points.push(cell.spawn_points)
       objects.deleted_objects.push(cell.deleted_objects)
-      objects.is_truncated_list = false
-      objects.fort_summaries.push(cell.fort_summaries.map(sum => sum))
-      objects.decimated_spawn_points.push(cell.decimated_spawn_points.map(dec => dec))
+      objects.fort_summaries.push(cell.fort_summaries)
+      objects.decimated_spawn_points.push(cell.decimated_spawn_points)
 
-      cell.wild_pokemons.map(pokemon =>
+      cell.wild_pokemons.map(pokemon => {
+        pokemon.pokemon_id = pokemon.pokemon_data.pokemon_id,
         objects.wild_pokemons.push(new Pokemon(pokemon, this))
-      )
+      })
+
       cell.catchable_pokemons.map(pokemon =>
         objects.catchable_pokemons.push(new Pokemon(pokemon, this))
       )
+
       cell.nearby_pokemons.map(pokemon =>
         objects.nearby_pokemons.push(new Pokemon(pokemon, this))
       )
+
       cell.forts.map(fort => {
         fort = Fort(fort, this)
+
         if (fort.isCheckpoint)
           objects.forts.checkpoints.push(fort)
         else
           objects.forts.gyms.push(fort)
         }
       )
+
       //sort checkpoints
-      objects.forts.checkpoints.sort(dynamicSort("distance"));
-      objects.forts.gyms.sort(dynamicSort("distance"));
+      objects.forts.checkpoints.sort(dynamicSort('distance'))
+      objects.forts.gyms.sort(dynamicSort('distance'))
     }
+
     this.player.surroundings = objects
 
     return objects
   }
 
 }
+
+PokemonGOAPI.POGOProtos = API.POGOProtos
 
 export default PokemonGOAPI
