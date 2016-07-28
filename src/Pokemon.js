@@ -6,12 +6,21 @@ const pokedexMap = new Map();
 for(let p of pokedex.pokemon)
   pokedexMap.set(p.id, p)
 
+function getPokedexEntry(pokemon_id) {
+  let pokemon = pokedexMap.get(pokemon_id)
+
+  if (pokemon)
+    delete pokemon.id
+
+  return pokemon
+}
+
 /**
  * [class description]
  */
 class Pokemon {
   constructor(props, parent) {
-    Object.assign(this, props, pokedexMap.get(props.pokemon_id))
+    Object.assign(this, props, getPokedexEntry(props.pokemon_id))
     Object.defineProperty(this, 'parent', {value: parent})
   }
 
