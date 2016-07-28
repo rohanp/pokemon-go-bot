@@ -1,7 +1,7 @@
 import pokedex from '../pokedex.json'
 import rand from 'randgen'
 
-var pokedexMap = new Map();
+const pokedexMap = new Map();
 
 for(let p of pokedex.pokemon)
   pokedexMap.set(p.id, p)
@@ -13,9 +13,6 @@ class Pokemon {
   constructor(props, parent) {
     Object.assign(this, props, pokedexMap.get(props.pokemon_id))
     Object.defineProperty(this, 'parent', {value: parent})
-
-    delete this.id
-    this.catchable = !props.distance_in_meters
   }
 
 
@@ -94,29 +91,6 @@ class Pokemon {
 
 
   /**
-   * Gives a berry to the pokemon before
-   * trying to catch it. Dose making it esier to catch
-   *
-   * Note that you can only feed it once.
-   * Giving it twice don't make any diffrent
-   *
-   * @return {[type]} [description]
-   */
-  async feed() { // name the function to something matching the request?
-    return console.warn('not done yet')
-
-    if(this.isCatching)
-      throw new Error('Can only feed berries to pokemon you have encounter')
-
-    // TODO
-    let res = await this.parent.Call([{
-      request: '???'
-    }])
-  }
-
-
-
-  /**
    * [encounterAndCatch description]
    * @param  {[type]} pokeball [description]
    * @return {[type]}          [description]
@@ -142,7 +116,7 @@ class Pokemon {
     return this.parent.Call([{
       request: 'RELEASE_POKEMON',
       message: {
-        pokemon_id: this.pokemon_id,
+        pokemon_id: this.id,
       }
     }])
   }
@@ -157,7 +131,7 @@ class Pokemon {
     return this.parent.Call([{
       request: 'EVOLVE_POKEMON',
       message: {
-        pokemon_id: this.pokemon_id,
+        pokemon_id: this.id,
       }
     }])
   }
@@ -172,7 +146,7 @@ class Pokemon {
     return this.parent.Call([{
       request: 'UPGRADE_POKEMON',
       message: {
-        pokemon_id: this.pokemon_id,
+        pokemon_id: this.id,
       }
     }])
   }
@@ -186,7 +160,7 @@ class Pokemon {
     return this.parent.Call([{
       request: 'SET_FAVORITE_POKEMON',
       message: {
-        pokemon_id: this.pokemon_id,
+        pokemon_id: this.id,
         is_favorite: true,
       }
     }])
@@ -203,7 +177,7 @@ class Pokemon {
     return this.parent.Call([{
       request: 'NICKNAME_POKEMON',
       message: {
-        pokemon_id: this.pokemon_id,
+        pokemon_id: this.id,
         nickname: name,
       }
     }])

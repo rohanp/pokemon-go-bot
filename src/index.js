@@ -223,9 +223,10 @@ class PokemonGOAPI {
         objects.wild_pokemons.push(new Pokemon(pokemon, this))
       })
 
-      cell.catchable_pokemons.map(pokemon =>
+      cell.catchable_pokemons.map(pokemon => {
+        pokemon.catchable = true
         objects.catchable_pokemons.push(new Pokemon(pokemon, this))
-      )
+      })
 
       cell.nearby_pokemons.map(pokemon =>
         objects.nearby_pokemons.push(new Pokemon(pokemon, this))
