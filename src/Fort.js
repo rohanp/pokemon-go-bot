@@ -98,6 +98,7 @@ class Gym extends Fort {
 
     delete this.type
     delete this.lure_info
+    this.gym_points = this.gym_points.toNumber()
     this.isGym = true
   }
 
