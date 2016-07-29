@@ -27,6 +27,7 @@ class Player {
       altitude: 0,
       provider: '',
       sessionData: {},
+      lastCheckpointSearch: {}
     }
     this.Auth = new Auth()
   }

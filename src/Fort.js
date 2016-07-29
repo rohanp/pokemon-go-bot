@@ -209,6 +209,7 @@ class Checkpoint extends Fort {
         fort_longitude: this.longitude
       }
     }])
+    this.player.lastCheckpointSearch = search
     console.log('[+] Search complete')
     return search
   }
