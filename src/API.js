@@ -35,7 +35,7 @@ class Connection {
         // console.log('[i] Received OK: '+ResponseType)
       } catch(error) {
         console.log('[!] Response error!')
-        throw new Error('Response error!')
+        throw error
       }
     })
 

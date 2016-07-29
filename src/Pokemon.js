@@ -9,9 +9,9 @@ for(let p of pokedex.pokemon)
 
 var	getPokedexEntry = function(pokemon_id) {
 	   let pokemon = pokedexMap.get(pokemon_id);
-	   if (pokemon) {
+	   /*if (pokemon) {
 	     delete pokemon.id;
-	   }
+	   }*/
 	   return pokemon;
 
 	 }
@@ -101,7 +101,7 @@ class Pokemon {
 
     var res;
 
-    for(let i of Array(10)){
+    for(let i of Array(5)){
 
         var ball = Math.random() > .25 ? items.poke_ball : items.great_ball
 
@@ -183,7 +183,7 @@ class Pokemon {
     let result = await this.catch(items)
     this.isCatching = false
 
-    return result
+    return pok
   }
 
 

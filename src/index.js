@@ -96,7 +96,8 @@ class PokemonGOAPI {
       pokemons: [],
       items: {},
       eggs: [],
-      candies: []
+      candies: [],
+			pokecount: Array.from({ length: 151 }, () => 0)
     }
 
     var itemData = PokemonGOAPI.POGOProtos.Inventory.ItemId
@@ -112,9 +113,14 @@ class PokemonGOAPI {
 
       if (data.pokemon_data) {
         let pokemon = new Pokemon(data.pokemon_data, this)
-        data.pokemon_data.is_egg
-          ? inventory.eggs.push(pokemon)
-          : inventory.pokemons.push(pokemon)
+
+				if (data.pokemon_data.is_egg)
+        	inventory.eggs.push(pokemon)
+        else{
+          inventory.pokemons.push(pokemon)
+					inventory.pokecount[pokemon.id] += 1
+				}
+
       } else if (data.item) {
         inventory.items[itemData[data.item.item_id]] = new Item(data.item, this)
       }
