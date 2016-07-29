@@ -1,11 +1,10 @@
 import pokedex from '../pokedex.json'
 import rand from 'randgen'
 
-var pokedexMap = new Map();
+const pokedexMap = new Map();
 
 for(let p of pokedex.pokemon)
   pokedexMap.set(p.id, p)
-
 
 var	getPokedexEntry = function(pokemon_id) {
 	   let pokemon = pokedexMap.get(pokemon_id);
@@ -25,6 +24,7 @@ class Pokemon {
     Object.defineProperty(this, 'parent', {value: parent})
 
     this.catchable = !props.distance_in_meters
+
   }
 
 
@@ -146,6 +146,7 @@ class Pokemon {
 
 
   /**
+<<<<<<< HEAD
    * Gives a berry to the pokemon before
    * trying to catch it. Dose making it esier to catch
    *
@@ -167,6 +168,8 @@ class Pokemon {
   }
 
   /**
+=======
+>>>>>>> 275b095a659cd056dfa791273e079aa629c23a5f
    * [encounterAndCatch description]
    * @param  {[type]} pokeball [description]
    * @return {[type]}          [description]
@@ -213,7 +216,7 @@ class Pokemon {
     return this.parent.Call([{
       request: 'EVOLVE_POKEMON',
       message: {
-        pokemon_id: this.pokemon_id,
+        pokemon_id: this.id,
       }
     }])
   }
@@ -228,7 +231,7 @@ class Pokemon {
     return this.parent.Call([{
       request: 'UPGRADE_POKEMON',
       message: {
-        pokemon_id: this.pokemon_id,
+        pokemon_id: this.id,
       }
     }])
   }
@@ -242,7 +245,7 @@ class Pokemon {
     return this.parent.Call([{
       request: 'SET_FAVORITE_POKEMON',
       message: {
-        pokemon_id: this.pokemon_id,
+        pokemon_id: this.id,
         is_favorite: true,
       }
     }])
@@ -259,7 +262,7 @@ class Pokemon {
     return this.parent.Call([{
       request: 'NICKNAME_POKEMON',
       message: {
-        pokemon_id: this.pokemon_id,
+        pokemon_id: this.id,
         nickname: name,
       }
     }])

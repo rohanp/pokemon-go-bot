@@ -134,5 +134,23 @@ class Item {
     }])
   }
 
+
+
+  /**
+   * Recycles the item
+   *
+   * @param  {Number} count Count of the items you want to recycle
+   * @return {[type]}       [description]
+   */
+  recycle(count = 1) {
+    return this.parent.Call([{
+      request: 'RECYCLE_INVENTORY_ITEM',
+      message: {
+        item_id: this.item_id,
+        count,
+      }
+    }])
+  }
+
 }
 export default Item
