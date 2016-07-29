@@ -1,3 +1,4 @@
+import "babel-polyfill"
 import GeoCoder from 'geocoder'
 import moment from 'moment'
 import Auth from '~/Auth'

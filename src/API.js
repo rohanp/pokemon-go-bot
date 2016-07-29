@@ -1,6 +1,9 @@
+import "babel-polyfill"
+
 import {
   API_URL
 } from './settings'
+
 
 import _ from 'lodash'
 import fetch from 'node-fetch'

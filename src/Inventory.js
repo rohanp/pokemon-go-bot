@@ -1,3 +1,5 @@
+import "babel-polyfill"
+
 class Item {
   constructor(id){
     this.count = 0

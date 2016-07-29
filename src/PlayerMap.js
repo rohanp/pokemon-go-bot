@@ -1,3 +1,4 @@
+import "babel-polyfill"
 import s2 from 's2geometry-node'
 
 class PlayerMap {
