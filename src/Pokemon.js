@@ -136,7 +136,7 @@ class Pokemon {
    * [envolve description]
    * @return {[type]} [description]
    */
-  envolve() {
+  evolve() {
     return this.parent.Call([{
       request: 'EVOLVE_POKEMON',
       message: {
