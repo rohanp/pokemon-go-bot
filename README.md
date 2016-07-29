@@ -15,6 +15,7 @@ npm i -S pokemongo-api
 ## Example
 See /example folder
 
+
 # To-Do:
 - [x] Login as pokemon trainer + token
 - [x] Login over google + token
