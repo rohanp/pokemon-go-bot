@@ -35,9 +35,9 @@ class Connection {
       var Responses = POGOProtos.Networking.Responses
       try {
         respt[ResponseType] = Responses[ResponseType].decode(res.returns[key])
-        console.log('[i] Received OK: '+ResponseType)
+        this.parent.log.info('[i] Received OK: '+ResponseType)
       } catch(error) {
-        console.log('[!] Response error!')
+        this.parent.log.info('[!] Response error!')
         throw error
       }
     })
@@ -94,7 +94,7 @@ class Connection {
       res = POGOProtos.Networking.Envelopes.ResponseEnvelope.decode(body);
     } catch (e) {
       if (e.decoded) { // Truncated
-        console.warn(e);
+        this.parent.log.warn(e);
         res = e.decoded; // Decoded message with missing required fields
       }
     }
@@ -119,10 +119,10 @@ class Connection {
 
     if (res.api_url) {
       this.endPoint = `https://${res.api_url}/rpc`
-      console.error('[!] Endpoint set: '+ this.endPoint);
+      this.parent.log.error('[!] Endpoint set: '+ this.endPoint);
       return this.endPoint
     } else {
-      console.error('[!] Endpoint missing in request, lets try again.. in 5 seconds');
+      this.parent.log.error('[!] Endpoint missing in request, lets try again.. in 5 seconds');
       return new Promise( resolve =>
         setTimeout(() =>
           resolve(this.setEndpoint(user))
@@ -139,7 +139,7 @@ class Connection {
 
   _setEndpoint(body) {
     if (res.api_url) {
-      console.log('[i] Received API Endpoint: ' + this.endPoint)
+      this.parent.log.info('[i] Received API Endpoint: ' + this.endPoint)
       resolve(this.endPoint)
     }
   }

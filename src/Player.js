@@ -30,7 +30,7 @@ class Player {
       sessionData: {},
       lastCheckpointSearch: {}
     }
-    this.Auth = new Auth()
+    this.Auth = new Auth(parent)
   }
 
   set provider(provider) {
@@ -58,19 +58,19 @@ class Player {
   // TODO return Date obj
   get createdDate() {
     var date = new moment((this.playerInfo.sessionData.creation_timestamp_ms.toString() / 100)).format("dddd, MMMM Do YYYY, h:mm:ss a")
-    console.log(`[+] You are playing Pokemon Go since: {${date}}`)
+    this.parent.log.info(`[+] You are playing Pokemon Go since: {${date}}`)
     return date
   }
 
   get pokeStorage() {
     var storage = this.playerInfo.sessionData.max_pokemon_storage
-    console.log(`[+] Poke Storage: {${storage}}`)
+    this.parent.log.info(`[+] Poke Storage: {${storage}}`)
     return storage
   }
 
   get itemsStorage() {
     var storage = this.playerInfo.sessionData.max_item_storage
-    console.log(`[+] Item Storage: {${storage}}`)
+    this.parent.log.info(`[+] Item Storage: {${storage}}`)
     return storage
   }
 
@@ -78,7 +78,7 @@ class Player {
   get currency() {
     var curr = this.playerInfo.sessionData.currencies
     curr.map(obj => {
-      console.log(`[+] Currency (${obj.type}): {${storage}}`)
+      this.parent.log.info(`[+] Currency (${obj.type}): {${storage}}`)
     })
     return curr
   }
@@ -103,7 +103,7 @@ class Player {
 
     let distance = geolib.getDistance(this.location, destination)
     this.location = destination
-    console.log(`[i] We just walked ${distance} meters`)
+    this.parent.log.info(`[i] We just walked ${distance} meters`)
   }
 
 
@@ -129,10 +129,10 @@ class Player {
 
     //distance less than 10 meters?
     if (distance <= 10){
-      console.log(`[i] Walked to specified distance`)
+      this.parent.log.info(`[i] Walked to specified distance`)
       return true
     } else {
-      console.log(`[i] Walked closer to [`+lat+`,`+long+`] - distance is now: ${distance} meters`)
+      this.parent.log.info(`[i] Walked closer to [`+lat+`,`+long+`] - distance is now: ${distance} meters`)
     }
   }
 
