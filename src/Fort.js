@@ -190,12 +190,12 @@ class Checkpoint extends Fort {
     let {latitude, longitude} = this.parent.player.location
 
     if (this.distance > 39){
-      console.log('[+] To far away, cant search thisone')
+      this.parent.log.info('[+] To far away, cant search thisone')
       return false
     }
 
     if (this.cooldown !== null){
-      console.log('[+] Cooldown active, please wait..')
+      this.parent.log.info('[+] Cooldown active, please wait..')
       return false
     }
 
@@ -209,13 +209,13 @@ class Checkpoint extends Fort {
         fort_longitude: this.longitude
       }
     }])
-
 		const map = [ "NO_RESULT_SET", "SUCCESS", "OUT_OF_RANGE",
 									"IN_COOLDOWN_PERIOD", "INVENTORY_FULL"]
 
 		let i = search.FortSearchResponse.result
 		console.log('[i] Search Response: ' + map[i])
 
+    this.parent.player.lastCheckpointSearch = search
     return search
   }
 }

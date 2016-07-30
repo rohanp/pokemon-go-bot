@@ -22,9 +22,11 @@ class Player {
       altitude: 0,
       provider: '',
       sessionData: {},
+      lastCheckpointSearch: {}
     }
-    this.Auth = new Auth()
+
 		this.lastDirection = [-1e-4, -1e-4]
+    this.Auth = new Auth(parent)
   }
 
   set provider(provider) {
@@ -52,19 +54,19 @@ class Player {
   // TODO return Date obj
   get createdDate() {
     var date = new moment((this.playerInfo.sessionData.creation_timestamp_ms.toString() / 100)).format("dddd, MMMM Do YYYY, h:mm:ss a")
-    console.log(`[+] You are playing Pokemon Go since: {${date}}`)
+    this.parent.log.info(`[+] You are playing Pokemon Go since: {${date}}`)
     return date
   }
 
   get pokeStorage() {
     var storage = this.playerInfo.sessionData.max_pokemon_storage
-    // console.log(`[+] Poke Storage: {${storage}}`)
+    this.parent.log.info(`[+] Poke Storage: {${storage}}`)
     return storage
   }
 
   get itemsStorage() {
     var storage = this.playerInfo.sessionData.max_item_storage
-    console.log(`[+] Item Storage: {${storage}}`)
+    this.parent.log.info(`[+] Item Storage: {${storage}}`)
     return storage
   }
 
@@ -72,7 +74,7 @@ class Player {
   get currency() {
     var curr = this.playerInfo.sessionData.currencies
     curr.map(obj => {
-      console.log(`[+] Currency (${obj.type}): {${storage}}`)
+      this.parent.log.info(`[+] Currency (${obj.type}): {${storage}}`)
     })
     return curr
   }
@@ -94,12 +96,12 @@ class Player {
 		}
 
 		do { // make sure dont go in opposite direction as last step
-			var randlat = randrange(2e-4)
-	    var randlong = randrange(2e-4)
+			var randlat = randrange(4e-4)
+	    var randlong = randrange(4e-4)
 
 		} while ( dot(randlat, randlong, ...this.lastDirection) < 0)
 
-		if (Math.random() < 0.25)
+		if (Math.random() < 0.2)
 			this.lastStep = [randlat, randlong]
 
 		let destination = {
@@ -109,7 +111,7 @@ class Player {
 
     let distance = geolib.getDistance(this.location, origin)
 
-    if (distance > 300){
+    if (distance > 1000){
         console.log("I've wandered off! Heading back to origin...")
         await this.walkToPoint(...origin)
     }
@@ -152,12 +154,12 @@ class Player {
 
     //distance less than 10 meters?
     if (distance <= 10){
-      console.log(`[i] Walked to specified distance`)
+      this.parent.log.info(`[i] Walked to specified distance`)
       return true
 
     } else {
       this.location  = newLocation
-      console.log(`[i] Walking to pokestop: ${distance} m away`)
+      console.log(`[i] Walking to point: ${distance} m away`)
       await new Promise(resolve => setTimeout(resolve, 2000))
       await this.walkToPoint(lat, long)
     }

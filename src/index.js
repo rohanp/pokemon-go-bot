@@ -1,3 +1,4 @@
+
 import Player from '~/Player'
 import API from '~/API'
 import Item from '~/Item'
@@ -26,6 +27,19 @@ class PokemonGOAPI {
     this.logged = false
     this.debug = true
     this.useHeartBeat = false
+
+    this.logging = (props && props.logging) != null
+      ? props.logging
+      : true // logging defaults to true
+  }
+
+  get log() {
+    const logMsg = (level) => (...args) => this.logging && console[level](...args)
+    return {
+      info: logMsg('info'),
+      warn: logMsg('warn'),
+      error: logMsg('error'),
+    }
   }
 
 
@@ -84,11 +98,11 @@ class PokemonGOAPI {
 			pokecount: Array.from({ length: 151 }, () => 0)
     }
 
-    var itemData = PokemonGOAPI.POGOProtos.Inventory.ItemId
+    var itemData = PokemonGOAPI.POGOProtos.Inventory.Item.ItemId
     itemData = Object.keys(itemData).reduce((obj, key) => {
       obj[ itemData[key] ] = key.toLowerCase().replace('item_', '')
 
-      inventory.items[obj[itemData[key]]] = new PokemonGOAPI.POGOProtos.Inventory.Item
+      inventory.items[obj[itemData[key]]] = new PokemonGOAPI.POGOProtos.Inventory.InventoryItem
       return obj
     }, {})
 
@@ -102,7 +116,6 @@ class PokemonGOAPI {
         	inventory.eggs.push(pokemon)
         else{
           inventory.pokemons.push(pokemon)
-					inventory.pokecount[pokemon.id] += 1
 				}
 
       } else if (data.item) {
@@ -179,7 +192,7 @@ class PokemonGOAPI {
   async _loopHeartBeat() {
     while(this.useHeartBeat){
       var area = this.GetMapObjects()
-      console.log('[+] Sent out heartbeat: (player.surroundings is updated)')
+      this.parent.log.info('[+] Sent out heartbeat: (player.surroundings is updated)')
       await new Promise(resolve => setTimeout(resolve, 2700))
     }
   }

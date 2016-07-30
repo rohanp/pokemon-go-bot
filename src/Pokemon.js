@@ -8,9 +8,9 @@ for(let p of pokedex.pokemon)
 
 var	getPokedexEntry = function(pokemon_id) {
 	   let pokemon = pokedexMap.get(pokemon_id);
-	   /*if (pokemon) {
+	   if (pokemon) {
 	     delete pokemon.id;
-	   }*/
+	   }
 	   return pokemon;
 
 	 }
@@ -75,6 +75,7 @@ class Pokemon {
 
 		if (res.EncounterResponse.status == Status.INVENTORY_FULL){
 			console.log("[!][!][!] Pokemon Inventory Full!!")
+			return null
 		}
 
     return res
@@ -89,12 +90,6 @@ class Pokemon {
 			FLEE: 3,
 			MISSED: 4
 		})
-
-		const CATCH_ERROR = 0;
-		const CATCH_SUCCESS = 1;
-		const CATCH_ESCAPE = 2;
-		const CATCH_FLEE = 3;
-		const CATCH_MISSED = 4;
 
 		var map = ["CATCH_ERROR", "CATCH_SUCCESS", "CATCH_ESCAPE",
 							 "CATCH_FLEE", "CATCH_MISSED"]
@@ -112,7 +107,7 @@ class Pokemon {
                 encounter_id: this.encounter_id,
                 pokeball: ball.item_id,
                 normalized_reticle_size: Math.min(1.95, rand.rnorm(1.9, 0.05)),
-                spawn_point_guid: this.spawn_point_id,
+                spawn_point_id: this.spawn_point_id,
                 hit_pokemon: true,
                 spin_modifier: Math.min(0.95, rand.rnorm(0.85, 0.1)),
                 normalized_hit_position: 1.0,
@@ -132,7 +127,7 @@ class Pokemon {
             console.log("[!] Failed to catch. Trying again...")
         }
 
-				await new Promise(resolve => setTimeout(resolve, 3000))
+				await new Promise(resolve => setTimeout(resolve, 2000))
 
 				if (3 < i){
 						console.log("Whipping out the GreatBall")
@@ -180,9 +175,12 @@ class Pokemon {
     this.isCatching = true
     let pok = await this.encounter()
 
+		if (pok == null)
+			return null
+
 		console.log("[!] Encountered a " + pokedexMap.get(this.pokemon_id).name)
 
-		await new Promise(resolve => setTimeout(resolve, 100))
+		await new Promise(resolve => setTimeout(resolve, 1000))
 
     // TODO: use berry?
     let result = await this.catch(items)
