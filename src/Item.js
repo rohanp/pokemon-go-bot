@@ -51,7 +51,7 @@ class Item {
       message: {
         item_id: this.item_id,
         encounter_id: pokemon.encounter_id,
-        spawn_point_guid: pokemon.spawn_point_id,
+        spawn_point_id: pokemon.spawn_point_id,
       }
     }])
 
