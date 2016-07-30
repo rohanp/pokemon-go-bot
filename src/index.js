@@ -84,11 +84,11 @@ class PokemonGOAPI {
       candies: []
     }
 
-    var itemData = PokemonGOAPI.POGOProtos.Inventory.ItemId
+    var itemData = PokemonGOAPI.POGOProtos.Inventory.Item.ItemId
     itemData = Object.keys(itemData).reduce((obj, key) => {
       obj[ itemData[key] ] = key.toLowerCase().replace('item_', '')
 
-      inventory.items[obj[itemData[key]]] = new PokemonGOAPI.POGOProtos.Inventory.Item
+      inventory.items[obj[itemData[key]]] = new PokemonGOAPI.POGOProtos.Inventory.Item.ItemData
       return obj
     }, {})
 
