@@ -1,4 +1,3 @@
-import "babel-polyfill"
 import geolib from 'geolib'
 
 /**

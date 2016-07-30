@@ -1,5 +1,3 @@
-import "babel-polyfill"
-
 /**
  * Called if a parameter is missing and
  * the default value is evaluated.
