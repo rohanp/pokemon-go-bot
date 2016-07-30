@@ -27,6 +27,19 @@ class PokemonGOAPI {
     this.logged = false
     this.debug = true
     this.useHeartBeat = false
+
+    this.logging = (props && props.logging) != null
+      ? props.logging
+      : true // logging defaults to true
+  }
+
+  get log() {
+    const logMsg = (level) => (...args) => this.logging && console[level](...args)
+    return {
+      info: logMsg('info'),
+      warn: logMsg('warn'),
+      error: logMsg('error'),
+    }
   }
 
 
@@ -174,7 +187,7 @@ class PokemonGOAPI {
   async _loopHeartBeat() {
     while(this.useHeartBeat){
       var area = this.GetMapObjects()
-      console.log('[+] Sent out heartbeat: (player.surroundings is updated)')
+      this.parent.log.info('[+] Sent out heartbeat: (player.surroundings is updated)')
       await new Promise(resolve => setTimeout(resolve, 2700))
     }
   }

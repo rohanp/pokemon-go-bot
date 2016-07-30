@@ -15,7 +15,8 @@ import {
 } from './settings'
 
 class Auth {
-  constructor(props) {
+  constructor(parent) {
+    this.parent = parent
     this.google = new GoogleOAuth();
     this.options = {
       url: LOGIN_URL,
@@ -31,13 +32,13 @@ class Auth {
   async login(user, pass, provider) {
     let res;
 
-    console.log('[i] Logging with user: ' + user)
+    this.parent.log.info('[i] Logging with user: ' + user)
     if (provider === 'ptc') {
       res = await this.PokemonAccount(user, pass)
-      console.log('[i] Received PTC access token!')
+      this.parent.log.info('[i] Received PTC access token!')
     } else {
       res = await this.GoogleAccount(user, pass)
-      console.log('[i] Received Google access token!')
+      this.parent.log.info('[i] Received Google access token!')
     }
 
     return res
@@ -114,8 +115,8 @@ class Auth {
             if (!token)
               return reject(new Error('Login failed'))
 
-            console.log('[i] Login ok')
-            console.log('[i] Session token: ' + token)
+            this.parent.log.info('[i] Login ok')
+            this.parent.log.info('[i] Session token: ' + token)
             resolve(token)
           })
         })
