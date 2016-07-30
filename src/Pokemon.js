@@ -75,7 +75,7 @@ class Pokemon {
         encounter_id: this.encounter_id,
         pokeball: pokeball || 1, // 2 for grate ball
         normalized_reticle_size: Math.min(1.95, rand.rnorm(1.9, 0.05)),
-        spawn_point_guid: this.spawn_point_id,
+        spawn_point_id: this.spawn_point_id,
         hit_pokemon: true,
         spin_modifier: Math.min(0.95, rand.rnorm(0.85, 0.1)),
         normalized_hit_position: 1.0,
