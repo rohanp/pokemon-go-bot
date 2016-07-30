@@ -1,8 +1,9 @@
 import GeoCoder from 'geocoder'
 import moment from 'moment'
 import Auth from '~/Auth'
-import geolib from 'geolib'
 
+var _ = require("underscore")
+var geolib = require("geolib")
 
 // all floats yo
 function randrange(range){
@@ -96,27 +97,32 @@ class Player {
 		}
 
 		do { // make sure dont go in opposite direction as last step
-			var randlat = randrange(4e-4)
-	    var randlong = randrange(4e-4)
+			var randlat = randrange(2e-4)
+	    var randlong = randrange(2e-4)
 
 		} while ( dot(randlat, randlong, ...this.lastDirection) < 0)
 
 		if (Math.random() < 0.2)
-			this.lastStep = [randlat, randlong]
+			this.lastDirection = [randlat, randlong]
 
 		let destination = {
 		 latitude: this.location.latitude + randlat,
 		 longitude: this.location.longitude + randlong
 		 }
 
-    let distance = geolib.getDistance(this.location, origin)
+		if (! isNaN(this.location.latitude)){
+			console.log(this.location)
+	    let distance = geolib.getDistance(this.location, origin)
 
-    if (distance > 1000){
-        console.log("I've wandered off! Heading back to origin...")
-        await this.walkToPoint(...origin)
-    }
+			console.log(`Distance from origin: ${distance}`)
 
-    this.location = destination
+	    if (distance > 1000){
+	        console.log("I've wandered off! Heading back to origin...")
+	        await this.walkToPoint(..._.values(origin))
+	    }
+		}
+
+	  this.location = destination
   }
 
   async walkToPoint(lat, long){

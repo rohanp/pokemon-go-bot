@@ -36,7 +36,7 @@ class Connection {
         this.parent.log.info('[i] Received OK: '+ResponseType)
       } catch(error) {
         this.parent.log.info('[!] Response error!')
-        await new Promise(resolve => setTimeout(resolve, 3000))
+        console.log(error)
       }
     })
 
