@@ -101,7 +101,7 @@ class PokemonGOAPI {
     itemData = Object.keys(itemData).reduce((obj, key) => {
       obj[ itemData[key] ] = key.toLowerCase().replace('item_', '')
 
-      inventory.items[obj[itemData[key]]] = new PokemonGOAPI.POGOProtos.Inventory.Item.ItemData
+      inventory.items[obj[itemData[key]]] = new PokemonGOAPI.POGOProtos.Inventory.Item.InventoryItem
       return obj
     }, {})
 
