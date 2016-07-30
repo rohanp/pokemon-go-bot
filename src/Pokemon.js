@@ -103,7 +103,7 @@ class Pokemon {
 
     for(let i of Array(5)){
 
-        var ball = Math.random() > .25 ? items.poke_ball : items.great_ball
+        var ball = Math.random() > .5 ? items.poke_ball : items.great_ball
 
         try{
             res = await this.parent.Call([{
@@ -131,6 +131,8 @@ class Pokemon {
         } catch (error){
             console.log("[!] Failed to catch. Trying again...")
         }
+
+				await new Promise(resolve => setTimeout(resolve, 3000))
 
 				if (3 < i){
 						console.log("Whipping out the GreatBall")

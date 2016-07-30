@@ -8,6 +8,7 @@
     "compile": "babel --presets es2015,stage-0 -d dist/ src/",
     "prepublish": "npm run compile",
     "example": "babel-node scripts/example.js",
+		"test": "babel-node scripts/test.js",
     "robot": "babel-node scripts/robot.js",
     "robot2": "babel-node scripts/robot2.js"
   },
