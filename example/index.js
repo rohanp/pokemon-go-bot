@@ -1,2 +1,3 @@
 import 'babel-polyfill'
-import '~/example.js'
+import 'babel-register'
+import './example.js'
