@@ -1,5 +1,6 @@
 .env
 dist
+example-es5
 runcode/
 
 # OSX

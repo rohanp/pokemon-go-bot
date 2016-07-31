@@ -37,6 +37,7 @@ class Connection {
       } catch(error) {
         this.parent.log.info('[!] Response error!')
         console.log(error)
+				return
       }
     })
 

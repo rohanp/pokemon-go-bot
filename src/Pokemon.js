@@ -1,7 +1,11 @@
 import pokedex from '../pokedex.json'
 import rand from 'randgen'
+import {
+	WEAK_POKEMON
+} from './settings'
 
 const pokedexMap = new Map();
+var _ = require('underscore')
 
 for(let p of pokedex.pokemon)
   pokedexMap.set(p.id, p)
@@ -81,7 +85,7 @@ class Pokemon {
     return res
   }
 
-  async catch(items) {
+  async catch(items, ball) {
 
 		const Status = Object.freeze({
 	    ERROR: 0,
@@ -95,10 +99,9 @@ class Pokemon {
 							 "CATCH_FLEE", "CATCH_MISSED"]
 
     var res;
+		console.log(ball.item_id)
 
     for(let i of Array(5)){
-
-        var ball = Math.random() > .5 ? items.poke_ball : items.great_ball
 
         try{
             res = await this.parent.Call([{
@@ -178,12 +181,20 @@ class Pokemon {
 		if (pok == null)
 			return null
 
-		console.log("[!] Encountered a " + pokedexMap.get(this.pokemon_id).name)
+		var ball
+		var name = pokedexMap.get(this.pokemon_id).name
+
+		console.log("[!] Encountered a " + name)
+
+		if (_.indexOf(WEAK_POKEMON, name) != -1)
+		 	ball = items.poke_ball
+		else
+		 	ball= Math.random() > .85 ?  items.poke_ball: items.great_ball
 
 		await new Promise(resolve => setTimeout(resolve, 1000))
 
     // TODO: use berry?
-    let result = await this.catch(items)
+    let result = await this.catch(items, ball)
     this.isCatching = false
 
     return pok

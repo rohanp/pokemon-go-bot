@@ -26,7 +26,7 @@ class Player {
       lastCheckpointSearch: {}
     }
 
-		this.lastDirection = [-1e-4, -1e-4]
+		this.lastDirection = [randrange(1) * 1e-4, randrange(1) * 1e-4]
     this.Auth = new Auth(parent)
   }
 
@@ -110,19 +110,22 @@ class Player {
 		 longitude: this.location.longitude + randlong
 		 }
 
-		if (! isNaN(this.location.latitude)){
-			console.log(this.location)
-	    let distance = geolib.getDistance(this.location, origin)
-
-			console.log(`Distance from origin: ${distance}`)
-
-	    if (distance > 1000){
-	        console.log("I've wandered off! Heading back to origin...")
-	        await this.walkToPoint(..._.values(origin))
-	    }
+		if (isNaN(this.location.latitude)){
+			throw Error("Location is undefined")
 		}
 
-	  this.location = destination
+    let distance = geolib.getDistance(this.location, origin)
+
+		console.log(`[i] Distance from origin: ${distance}`)
+
+    if (distance > 500){
+        console.log("I've wandered off! Heading back to origin...")
+        await this.walkToPoint(..._.values(origin))
+
+		} else{
+			this.location = destination
+		}
+
   }
 
   async walkToPoint(lat, long){
@@ -161,6 +164,7 @@ class Player {
     //distance less than 10 meters?
     if (distance <= 10){
       this.parent.log.info(`[i] Walked to specified distance`)
+			this.location  = newLocation
       return true
 
     } else {

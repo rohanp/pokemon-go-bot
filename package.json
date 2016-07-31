@@ -6,6 +6,7 @@
   "scripts": {
     "commit": "git-cz",
     "compile": "babel --presets es2015,stage-0 -d dist/ src/",
+    "compile-example": "babel --presets es2015,stage-0 -d example-es5/ example/",
     "prepublish": "npm run compile",
     "example": "babel-node scripts/example.js",
 		"test": "babel-node scripts/test.js",
@@ -29,6 +30,7 @@
     "babel-preset-es2015": "^6.9.0",
     "babel-preset-stage-0": "^6.5.0",
     "babel-project-relative-import": "^2.0.0",
+    "babel-register": "^6.11.6",
     "commitizen": "^2.8.2",
     "cz-conventional-changelog": "^1.1.6",
     "semantic-release": "^4.3.5"
