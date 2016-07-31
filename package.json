@@ -6,9 +6,9 @@
   "scripts": {
     "commit": "git-cz",
     "compile": "babel --presets es2015,stage-0 -d dist/ src/",
+    "compile-example": "babel --presets es2015,stage-0 -d example-es5/ example/"
     "prepublish": "npm run compile",
     "example": "babel-node example/example.js",
-    "robot": "babel-node example/robot.js",
     "semantic-release": "semantic-release pre && npm publish && semantic-release post"
   },
   "repository": {
