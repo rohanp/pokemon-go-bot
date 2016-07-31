@@ -154,6 +154,12 @@ class Gym extends Fort {
    * @return {[type]}         [description]
    */
   deployPokemon(pokemon) {
+    if(pokemon.stamina_max !== pokemon.stamina)
+      throw new Error('Pokémons need to have full HP, before assigning to gym')
+
+    if(!this.isSameTeam && !this.isNeutral)
+      throw new Error("Can't set a pokemon on a other team's gym")
+
     let {latitude, longitude} = this.parent.player.location
 
     return this.parent.Call([{
