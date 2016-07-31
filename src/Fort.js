@@ -89,6 +89,24 @@ class Gym extends Fort {
 
 
   /**
+   * @return {Boolean} true if the team is on your team
+   */
+  get isSameTeam(){
+    return this.parent.player.playerInfo.sessionData.team == this.owned_by_team
+  }
+
+
+
+  /**
+   * @return {Boolean} true if no pokemon is assigned to the gym
+   */
+  get isNeutral(){
+    return this.owned_by_team == 0
+  }
+
+
+
+  /**
    * Gets gym description, suce as members, and gym details
    *
    * @return {GetGymDetailsResponse} [description]
