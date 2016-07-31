@@ -10,6 +10,7 @@ var lat = process.env.LATITUDE || 40.759211
 var lng = process.env.LONGITUDE || -73.984472
 
 
+
 const Poke = new PokeAPI()
 // The kind of ball you want to use when captureing
 
