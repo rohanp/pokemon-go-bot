@@ -27,6 +27,7 @@ class PokemonGOAPI {
     this.logged = false
     this.debug = true
     this.useHeartBeat = false
+    this.lastObjectsCall=0
 
     this.logging = (props && props.logging) != null
       ? props.logging
@@ -187,7 +188,7 @@ class PokemonGOAPI {
   async _loopHeartBeat() {
     while(this.useHeartBeat){
       var area = this.GetMapObjects()
-      this.parent.log.info('[+] Sent out heartbeat: (player.surroundings is updated)')
+      this.log.info('[+] Sent out heartbeat: (player.surroundings is updated)')
       await new Promise(resolve => setTimeout(resolve, 2700))
     }
   }
@@ -198,6 +199,13 @@ class PokemonGOAPI {
    * [GetMapObjects description]
    */
   async GetMapObjects() {
+    let callDiff = (this.lastObjectsCall+3000)-Date.now()
+    if (this.lastObjectsCall != 0 && callDiff > 0 ){
+      this.log.info('[!] We need 3 seconds wait between Map calls - waiting: '+ callDiff +'ms')
+      await new Promise(resolve => setTimeout(resolve, callDiff))
+    }
+
+
     let finalWalk = this.map.getNeighbors(this.player.playerInfo).sort()
     let nullarray = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
     let res = await this.Call([{
@@ -262,7 +270,7 @@ class PokemonGOAPI {
     objects.forts.gyms.sort((a, b) => a.distance - b.distance)
 
     this.player.surroundings = objects
-
+    this.lastObjectsCall = Date.now()
     return objects
   }
 
