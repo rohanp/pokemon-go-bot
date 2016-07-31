@@ -125,6 +125,8 @@ class Gym extends Fort {
       }
     }])
   }
+
+  /**
    * TODO: description
    *
    * [recallPokemon description]
