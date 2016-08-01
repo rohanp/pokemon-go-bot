@@ -174,6 +174,49 @@ class Gym extends Fort {
       }
     }])
   }
+
+
+  /**
+   * Initiate gym battle
+   *
+   * @param  {[array]} list of Pokemons that you want to attack the gym with
+   * @return {[type]} Returns a list of battle_id and more for the attack.
+   */
+  startBattle(pokemonIds) {
+    let {latitude, longitude} = this.parent.player.location
+
+    return this.parent.Call([{
+      request: 'START_GYM_BATTLE',
+      message: {
+        gym_id: this.id,
+        attacking_pokemon_ids: pokemonIds,
+        defending_pokemon_id: this.pokemon_data.id,
+        player_latitude: latitude,
+        player_longitude: longitude,
+      }
+    }])
+  }
+
+  /**
+   * the attack phase,
+   *
+   * @param  {[type]} pokemon The pokemon from your inventory
+   * @return {[type]}         [description]
+   */
+  attack(battle_id, attackActions, lastRetrievedAction) {
+    return this.parent.Call([{
+      request: 'ATTACK_GYM',
+      message: {
+        gym_id: this.id,
+        battle_id: battle_id,
+        attack_actions: attackActions,
+        last_retrieved_actions: lastRetrievedAction,
+        player_latitude: ,
+        player_longitude: ,
+      }
+    }])
+  }
+
 }
 
 
