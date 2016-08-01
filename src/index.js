@@ -32,6 +32,11 @@ class PokemonGOAPI {
     this.logging = (props && props.logging) != null
       ? props.logging
       : true // logging defaults to true
+    
+    this.requestInterval = (props && props.requestInterval) != null
+      ? props.requestInterval
+      : PAUSE_BETWEEN_REQUESTS // logging defaults to settings.js
+
   }
 
   get log() {
@@ -199,15 +204,15 @@ class PokemonGOAPI {
    * [GetMapObjects description]
    */
   async GetMapObjects() {
-    let callDiff = (this.lastObjectsCall + PAUSE_BETWEEN_REQUESTS)-Date.now()
+    let callDiff = (this.lastObjectsCall + this.requestInterval)-Date.now()
     if (this.lastObjectsCall != 0 && callDiff > 0 ){
-      this.log.info('[!] We need 3 seconds wait between Map calls - waiting: '+ callDiff +'ms')
+      this.log.info(`[!] We need ${this.requestInterval} ms wait between GetMapObjects calls - waiting: ${callDiff} ms`)
       await new Promise(resolve => setTimeout(resolve, callDiff))
     }
 
 
     let finalWalk = this.map.getNeighbors(this.player.playerInfo).sort()
-    let nullarray = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+    let nullarray = Array(21).fill(0) 
     let res = await this.Call([{
       request: 'GET_MAP_OBJECTS',
       message: {
