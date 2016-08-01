@@ -5,7 +5,7 @@ import Item from '~/Item'
 import Pokemon from '~/Pokemon'
 import Fort from '~/Fort'
 import PlayerMap from '~/PlayerMap'
-import { BANNED_POKEMONS } from './settings'
+import { PAUSE_BETWEEN_REQUESTS } from './settings'
 
 import rand from 'randgen'
 
@@ -199,7 +199,7 @@ class PokemonGOAPI {
    * [GetMapObjects description]
    */
   async GetMapObjects() {
-    let callDiff = (this.lastObjectsCall+3000)-Date.now()
+    let callDiff = (this.lastObjectsCall + PAUSE_BETWEEN_REQUESTS)-Date.now()
     if (this.lastObjectsCall != 0 && callDiff > 0 ){
       this.log.info('[!] We need 3 seconds wait between Map calls - waiting: '+ callDiff +'ms')
       await new Promise(resolve => setTimeout(resolve, callDiff))

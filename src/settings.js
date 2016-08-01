@@ -17,4 +17,6 @@ module.exports = {
 
   BANNED_POKEMONS: [10, 11, 13, 14, 16, 17, 19, 20, 21, 41, 43, 46, 69, 98, 118],
 
+  // (in ms.)
+  PAUSE_BETWEEN_REQUESTS: 1000,
 }
