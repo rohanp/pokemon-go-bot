@@ -47,19 +47,20 @@ class PokemonGOAPI {
   /**
    * [login description]
    *
-   * @param  {[type]} username [description]
-   * @param  {[type]} password [description]
-   * @param  {[type]} provider [description]
-   * @return {[type]}          [description]
+   * @param  {[type]} username          [description]
+   * @param  {[type]} password          [description]
+   * @param  {[type]} provider          [description]
+   * @param  {[type]} forceRefreshLogin [description]
+   * @return {[type]}                   [description]
    */
-  async login(username, password, provider) {
+  async login(username, password, provider, forceRefreshLogin) {
     if (provider !== 'ptc' && provider !== 'google') {
       throw new Error('Invalid provider')
     }
 
     this.player.provider = provider
 
-    await this.player.Login(username, password)
+    await this.player.Login(username, password, forceRefreshLogin)
     await this.api.setEndpoint(this.player.playerInfo)
 
     return this

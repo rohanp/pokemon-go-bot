@@ -3,6 +3,10 @@ import moment from 'moment'
 import Auth from '~/Auth'
 import geolib from 'geolib'
 
+const LOGIN_CACHE_LOCATION = './loginCache.json';
+const MILLIS_PER_MINUTE = 60 * 1000;
+let fs = require('fs');
+
 // Gives a random meters in any direction
 function getRandomDirection(){
   let latMorP = Math.random() < 0.5 ? -1 : 1
@@ -82,8 +86,48 @@ class Player {
     return curr
   }
 
-  async Login(user, pass) {
-    let res = await this.Auth.login(user, pass, this.playerInfo.provider)
+  async Login(user, pass, forceRefreshLogin) {
+    var loginCacheString = null
+    var loginCache = null
+
+    if (!forceRefreshLogin) {
+      console.log('Checking for login cache.')
+      try {
+        loginCacheString = fs.readFileSync(LOGIN_CACHE_LOCATION, 'utf8')
+      } catch (err) {
+        console.log('Could not read loginCache: ' + err)
+      }
+      try {
+        loginCache = JSON.parse(loginCacheString)
+      } catch (err) {
+        console.log('Could not parse loginCache: ' + err)
+      }
+    }
+
+    var res
+    if (loginCache &&
+        (user === loginCache.username) &&
+        ((Date.now() - loginCache.timestamp) < 10 * MILLIS_PER_MINUTE)) {
+      console.log('Logging in with cache.')
+      res = loginCache.accessToken
+    } else {
+      console.log('Logging in with regular auth.')
+      res = await this.Auth.login(user, pass, this.playerInfo.provider)
+    }
+
+    // Save login details to disk.
+    let cacheObj = {
+      username: user,
+      accessToken: res,
+      timestamp: Date.now(),
+    }
+    let prettyJson = JSON.stringify(cacheObj, null, 2)
+    try {
+      fs.writeFileSync(LOGIN_CACHE_LOCATION, prettyJson)
+      console.log('Login cache saved to file!')
+    } catch (err) {
+      console.log('Error saving cache to file: ' + err)
+    }
 
     this.playerInfo.username = user
     this.playerInfo.password = pass
