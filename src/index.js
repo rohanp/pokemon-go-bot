@@ -5,7 +5,7 @@ import Item from '~/Item'
 import Pokemon from '~/Pokemon'
 import Fort from '~/Fort'
 import PlayerMap from '~/PlayerMap'
-import { PAUSE_BETWEEN_REQUESTS } from './settings'
+import { PAUSE_BETWEEN_REQUESTS } from '~/settings'
 
 import rand from 'randgen'
 
