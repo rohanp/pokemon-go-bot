@@ -152,6 +152,12 @@ class Gym extends Fort {
     if (this.memberships.length == 0 || this.id == 0)
       await this.details()
 
+    if (this.isInBattle){
+      this.parent.log.info(`[!] GymBattle: already in battle`)
+      return false
+    }
+
+
     var battle = await this.parent.Call([{
       request: 'START_GYM_BATTLE',
       message: {
