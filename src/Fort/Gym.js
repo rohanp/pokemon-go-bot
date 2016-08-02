@@ -1,4 +1,5 @@
 import Fort from './Fort'
+import Fort from '~/Pokemon'
 
 class Gym extends Fort {
   constructor(props, parent) {
@@ -22,8 +23,6 @@ class Gym extends Fort {
     return this.parent.player.playerInfo.sessionData.team == this.owned_by_team
   }
 
-
-
   /**
    * @return {Boolean} true if no pokemon is assigned to the gym
    */
@@ -31,17 +30,51 @@ class Gym extends Fort {
     return this.owned_by_team == 0
   }
 
+  /**
+   * @return {integer} current gympoints
+   */
+  get points(){
+    return this.gym_points.toString()
+  }
 
+  /**
+   * @return {bool} true if in battle
+   */
+  get isInBattle(){
+    return this.is_in_battle
+  }
+
+  /**
+   * @return {integer}
+   */
+  get team(){
+    return this.owned_by_team
+  }
+
+  /**
+   * @return {string} Gym geolocation name
+   */
+  get name(){
+    return this.name
+  }
+
+  /**
+   * @return {pokemon} guard pokemon id
+   * TODO: more data is available in the this.memberships.pokemon_data[0]
+   */
+  get guardPokemon(){
+    return new Pokemon(this.guard_pokemon_id)
+  }
 
   /**
    * Gets gym description, suce as members, and gym details
    *
    * @return {GetGymDetailsResponse} [description]
    */
-  details() {
+  async details() {
     let {latitude, longitude} = this.parent.player.location
 
-    return this.parent.Call([{
+    var details = await this.parent.Call([{
       request: 'GET_GYM_DETAILS',
       message: {
         gym_id: this.id,
@@ -51,7 +84,19 @@ class Gym extends Fort {
         gym_longitude: this.longitude,
       }
     }])
+
+    let gym = details.GetGymDetailsResponse
+    Object.assign(
+      this, 
+      {name: gym.name},
+      {urls: gym.urls},
+      {description: gym.description},
+      {memberships: gym.gym_state.memberships},
+      gym.gym_state.fort_data,
+    )
+    return details
   }
+
 
   /**
    * TODO: description
@@ -117,7 +162,7 @@ class Gym extends Fort {
       message: {
         gym_id: this.id,
         attacking_pokemon_ids: pokemonIds,
-        defending_pokemon_id: this.pokemon_data.id,
+        defending_pokemon_id: this.guard_pokemon_id,
         player_latitude: latitude,
         player_longitude: longitude,
       }
