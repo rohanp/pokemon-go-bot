@@ -187,19 +187,25 @@ class Gym extends Fort {
       return false
     }
 
+    var BattleActions = POGOProtos.Data.Battle.BattleActionType
+    var actions = []
+    attackActions.map(action => {
+      actions.push(BattleActions[action])
+    })
+
     var attack = await this.parent.Call([{
       request: 'ATTACK_GYM',
       message: {
         gym_id: this.id,
         battle_id: this.currentAttack.battle_id,
-        attack_actions: attackActions,
+        attack_actions: actions,
         last_retrieved_actions: this.currentAttack.lastRetrievedAction,
         player_latitude: latitude,
         player_longitude: longitude,
       }
     }])
-
     this.currentAttack ={} //TODO: add data
+    
     return attack
   }
 
@@ -210,7 +216,7 @@ class Gym extends Fort {
    * @return {[type]} {AttackGymResponse} object
    */
   async instaWinBattle() {
-    return this.attack(8)
+    return this.attack(['ACTION_VICTORY'])
   }
 
 }
