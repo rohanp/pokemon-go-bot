@@ -20,6 +20,7 @@ class Connection {
     this.parent = parent
     this.endPoint = API_URL
     this.auth_ticket = null
+    this.numConsecutiveEndpointFailures = 0;
   }
 
   async Request(requests, userObj){
@@ -118,8 +119,13 @@ class Connection {
     if (res.api_url) {
       this.endPoint = `https://${res.api_url}/rpc`
       this.parent.log.error('[!] Endpoint set: '+ this.endPoint);
+      this.numConsecutiveEndpointFailures = 0;
       return this.endPoint
     } else {
+      this.numConsecutiveEndpointFailures++;
+      if (this.numConsecutiveEndpointFailures >= 5) {
+        throw 'Too many consecutive "Missing endpoint" failures. Abandoning login.';
+      }
       this.parent.log.error('[!] Endpoint missing in request, lets try again.. in 5 seconds');
       return new Promise( resolve =>
         setTimeout(() =>
