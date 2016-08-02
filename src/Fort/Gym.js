@@ -44,19 +44,6 @@ class Gym extends Fort {
     return this.is_in_battle
   }
 
-  /**
-   * @return {integer}
-   */
-  get team(){
-    return this.owned_by_team
-  }
-
-  /**
-   * @return {string} Gym geolocation name
-   */
-  get name(){
-    return this.name
-  }
 
   /**
    * @return {pokemon} guard pokemon id
@@ -86,6 +73,7 @@ class Gym extends Fort {
     }])
 
     let gym = details.GetGymDetailsResponse
+
     Object.assign(
       this, 
       {name: gym.name},
@@ -154,20 +142,29 @@ class Gym extends Fort {
    * @param  {[array]} list of Pokemons that you want to attack the gym with
    * @return {[type]} Returns a list of battle_id and more for the attack.
    */
-  startBattle(pokemonIds) {
+  async startBattle(pokemonIds) {
     let {latitude, longitude} = this.parent.player.location
 
-    return this.parent.Call([{
+    if (pokemonIds == undefined || pokemonIds.length == 0){
+      this.parent.log.info(`[!] GymBattle: pokemons array missing`)
+      return false
+    }
+    if (this.memberships.length == 0 || this.id == 0)
+      await this.details()
+
+    var battle = await this.parent.Call([{
       request: 'START_GYM_BATTLE',
       message: {
         gym_id: this.id,
-        attacking_pokemon_ids: pokemonIds,
-        defending_pokemon_id: this.guard_pokemon_id,
+        attacking_pokemon_ids: [13580295954861177709,14493702144884454174],
+        defending_pokemon_id: this.memberships[0].pokemon_data.id.toString(),
         player_latitude: latitude,
         player_longitude: longitude,
       }
     }])
-    
+
+    this.currentAttack ={} //TODO: add data
+    return battle
   }
 
   /**
@@ -176,20 +173,28 @@ class Gym extends Fort {
    * @param  {[type]} pokemon The pokemon from your inventory
    * @return {[type]}         [description]
    */
-  attack(battle_id, attackActions, lastRetrievedAction) {
+  async attack(battle_id, attackActions, lastRetrievedAction) {
     let {latitude, longitude} = this.parent.player.location
 
-    return this.parent.Call([{
+    if (this.currentAttack.length == 0){
+      this.parent.log.info(`[!] GymBattle: You need to start battle first: gym.startBattle(pokemon_ids)`)
+      return false
+    }
+    
+    var attack = await this.parent.Call([{
       request: 'ATTACK_GYM',
       message: {
         gym_id: this.id,
-        battle_id: battle_id,
+        battle_id: this.currentAttack.battle_id,
         attack_actions: attackActions,
-        last_retrieved_actions: lastRetrievedAction,
+        last_retrieved_actions: this.currentAttack.lastRetrievedAction,
         player_latitude: latitude,
         player_longitude: longitude,
       }
     }])
+
+    this.currentAttack ={} //TODO: add data
+    return attack
   }
 
 }
