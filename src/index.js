@@ -4,7 +4,7 @@ import API from '~/API'
 import Item from '~/Item'
 import Pokemon from '~/Pokemon'
 import Fort from '~/Fort'
-import {getCellIDs} from '../src/Utils'
+import {getCellIDs} from '~/Utils'
 import { PAUSE_BETWEEN_REQUESTS } from '~/settings'
 import rand from 'randgen'
 
