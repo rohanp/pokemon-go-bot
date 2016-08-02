@@ -209,7 +209,7 @@ class PokemonGOAPI {
     }
 
 
-    let finalWalk = getCellIDs(this.player.playerInfo.latitude, this.player.playerInfo.longitude).sort()
+    let finalWalk = getCellIDs(this.player.playerInfo.latitude, this.player.playerInfo.longitude).sort().slice(0,21)
     let nullarray = Array(21).fill(0) 
     let res = await this.Call([{
       request: 'GET_MAP_OBJECTS',
