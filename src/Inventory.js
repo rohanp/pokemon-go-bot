@@ -150,11 +150,23 @@ class Eggs extends Array {
 
 
 
+/**
+ * This will hold an array with candies that you have
+ */
+class Eggs extends Array {
+  constructor(){
+    super()
+  }
+}
+
+
+
 class Inventory {
   constructor(){
     this.items = new Items
     this.pokemons = new pokemons
     this.eggs = new Eggs
+    this.candies = new Candies
   }
 
 
