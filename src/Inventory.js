@@ -153,7 +153,7 @@ class Eggs extends Array {
 /**
  * This will hold an array with candies that you have
  */
-class Eggs extends Array {
+class Candies extends Array {
   constructor(){
     super()
   }
