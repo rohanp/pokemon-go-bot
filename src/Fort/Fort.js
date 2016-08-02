@@ -41,26 +41,5 @@ class Fort {
   }
 
 
-
-  /**
-   * TODO: description
-   *
-   * [addModifier description]
-   * @param {[type]} item_id [description]
-   */
-  addModifier(item_id){
-    let {latitude, longitude} = this.parent.player.location
-
-    return this.parent.Call([{
-      request: 'FORT_DETAILS',
-      message: {
-        modifier_type: item_id,
-        fort_id: this.id,
-        player_latitude: latitude,
-        player_longitude: longitude
-      }
-    }])
-  }
-
 }
 export default Fort
