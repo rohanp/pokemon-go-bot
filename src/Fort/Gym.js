@@ -140,7 +140,7 @@ class Gym extends Fort {
    * Initiate gym battle
    *
    * @param  {[array]} list of Pokemons that you want to attack the gym with
-   * @return {[type]} Returns a list of battle_id and more for the attack.
+   * @return {[type]} {StartGymBattle} object
    */
   async startBattle(pokemonIds) {
     let {latitude, longitude} = this.parent.player.location
@@ -168,19 +168,19 @@ class Gym extends Fort {
   }
 
   /**
-   * the attack phase,
+   * the attack phase
    *
-   * @param  {[type]} pokemon The pokemon from your inventory
-   * @return {[type]}         [description]
+   * @param  {[integer]} pokemon The pokemon from your inventory
+   * @return {[type]} {AttackGymResponse} object
    */
-  async attack(battle_id, attackActions, lastRetrievedAction) {
+  async attack(attackActions) {
     let {latitude, longitude} = this.parent.player.location
 
     if (this.currentAttack.length == 0){
       this.parent.log.info(`[!] GymBattle: You need to start battle first: gym.startBattle(pokemon_ids)`)
       return false
     }
-    
+
     var attack = await this.parent.Call([{
       request: 'ATTACK_GYM',
       message: {
@@ -195,6 +195,16 @@ class Gym extends Fort {
 
     this.currentAttack ={} //TODO: add data
     return attack
+  }
+
+
+  /**
+   * Instawin a battle
+   *
+   * @return {[type]} {AttackGymResponse} object
+   */
+  async instaWinBattle() {
+    return this.attack(8)
   }
 
 }
