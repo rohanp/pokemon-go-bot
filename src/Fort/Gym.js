@@ -1,5 +1,5 @@
 import Fort from './Fort'
-import Fort from '~/Pokemon'
+import Pokemon from '~/Pokemon'
 
 class Gym extends Fort {
   constructor(props, parent) {
