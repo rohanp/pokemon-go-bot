@@ -4,9 +4,8 @@ import API from '~/API'
 import Item from '~/Item'
 import Pokemon from '~/Pokemon'
 import Fort from '~/Fort'
-import PlayerMap from '~/PlayerMap'
+import {getCellIDs} from '../src/Utils'
 import { PAUSE_BETWEEN_REQUESTS } from '~/settings'
-
 import rand from 'randgen'
 
 /**
@@ -23,7 +22,6 @@ class PokemonGOAPI {
   constructor(props) {
     this.player = new Player(this)
     this.api = new API(this)
-    this.map = new PlayerMap()
     this.logged = false
     this.debug = true
     this.useHeartBeat = false
@@ -211,7 +209,7 @@ class PokemonGOAPI {
     }
 
 
-    let finalWalk = this.map.getNeighbors(this.player.playerInfo).sort()
+    let finalWalk = getCellIDs(this.player.playerInfo.latitude, this.player.playerInfo.longitude).sort()
     let nullarray = Array(21).fill(0) 
     let res = await this.Call([{
       request: 'GET_MAP_OBJECTS',
