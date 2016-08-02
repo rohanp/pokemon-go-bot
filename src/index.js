@@ -123,8 +123,8 @@ class PokemonGOAPI {
       } else if (data.item) {
         inventory.items[itemData[data.item.item_id]] = new Item(data.item, this)
       }
-      else if (data.pokemon_family) {
-        inventory.candies.push(new Item(data.pokemon_family, this))
+      else if (data.candy) {
+        inventory.candies.push(new Item(data.candy, this))
       }
     }
 
