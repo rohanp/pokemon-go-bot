@@ -67,27 +67,15 @@ class Connection {
       }
     }
 
-    // Temp https://github.com/bitinn/node-fetch/issues/136
-    var stream = require('stream');
-    var bufferStream = new stream.PassThrough();
-    bufferStream.end(protobuf);
-
     let res = await fetch(this.endPoint, {
-      body: bufferStream,
+      body: protobuf,
       method: 'POST',
       headers: {
         'User-Agent': 'Niantic App'
       }
     })
 
-    // Temp https://github.com/bitinn/node-fetch/issues/51
-    // Temp https://github.com/bitinn/node-fetch/pull/70
-    let body = await new Promise(resolve => {
-      let chunks = []
-      res.body
-        .on('data', chunk => chunks.push(chunk))
-        .on('end', () => resolve(Buffer.concat(chunks)))
-    })
+    let body = await res.buffer()
 
     try {
       res = POGOProtos.Networking.Envelopes.ResponseEnvelope.decode(body);
