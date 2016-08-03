@@ -17,6 +17,11 @@ module.exports = {
 
   BANNED_POKEMONS: [10, 11, 13, 14, 16, 17, 19, 20, 21, 41, 43, 46, 69, 98, 118],
 	WEAK_POKEMON: ["Pidgey", "Rattata", "Caterpie", "Spearow", "Weedle", "Zulbat",
-								"Pidgeotto", "Raticate", "Goldeen"]
+								"Pidgeotto", "Raticate", "Goldeen", "Paras", "Doduo", "Poliwag"],
+
+	RARE_POKEMON: ["Omanyte", "Kabuto", "Aerodactyl", "Lapras", "Snorlax", "Porygon",
+								 "Dratini", "Electabuzz", "Hitmonlee", "Hitmonchan",
+								 "Chansey", "Abra", "Machop", "Grimer", "Rhyhorn",
+							   "Lickitung", "Scyther", "Pinsir"]
 
 }

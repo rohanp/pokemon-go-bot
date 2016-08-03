@@ -1,6 +1,7 @@
 import pokedex from '../pokedex.json'
 import rand from 'randgen'
 import {
+	RARE_POKEMON,
 	WEAK_POKEMON
 } from './settings'
 
@@ -188,8 +189,10 @@ class Pokemon {
 
 		if (_.indexOf(WEAK_POKEMON, name) != -1)
 		 	ball = items.poke_ball
+		else if (_.indexOf(RARE_POKEMON, name) != -1)
+			ball = items.ultra_ball
 		else
-		 	ball= Math.random() > .85 ?  items.poke_ball: items.great_ball
+		 	ball = Math.random() > .7 ?  items.great_ball: items.poke_ball
 
 		await new Promise(resolve => setTimeout(resolve, 1000))
 

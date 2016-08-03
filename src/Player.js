@@ -116,11 +116,16 @@ class Player {
 
     let distance = geolib.getDistance(this.location, origin)
 
+		if (isNaN(distance)){
+			console.log("ERROR: infinite location??")
+			this.location = origin
+		}
+
 		console.log(`[i] Distance from origin: ${distance}`)
 
-    if (distance > 500){
+    if (distance > 1000){
         console.log("I've wandered off! Heading back to origin...")
-        await this.walkToPoint(..._.values(origin))
+        await this.walkToPoint(origin)
 
 		} else{
 			this.location = destination
@@ -128,10 +133,15 @@ class Player {
 
   }
 
-  async walkToPoint(lat, long){
+  async walkToPoint(point){
 
-      if (lat == null || long == null)
-        throw new Error('Null lat/long')
+		var lat = point.latitude
+		var long = point.longitude
+
+      if (! isFinite(lat) || ! isFinite(long)){
+				console.log(point)
+        throw new Error('Infinite lat/long')
+			}
 
       // at 4 m/s
     let stepSize = 8 // meters
