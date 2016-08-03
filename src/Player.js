@@ -3,7 +3,7 @@ import moment from 'moment'
 import Auth from '~/Auth'
 import geolib from 'geolib'
 
-const LOGIN_CACHE_LOCATION = './loginCache.json';
+const LOGIN_CACHE_LOCATION = './.loginCache';
 const MILLIS_PER_MINUTE = 60 * 1000;
 let fs = require('fs');
 
