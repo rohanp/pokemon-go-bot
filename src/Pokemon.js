@@ -25,7 +25,7 @@ var	getPokedexEntry = function(pokemon_id) {
  */
 class Pokemon {
   constructor(props, parent) {
-    Object.assign(this, props, getPokedexEntry(props.pokemon_id))
+    Object.assign(this, getPokedexEntry(props.pokemon_id), props)
     Object.defineProperty(this, 'parent', {value: parent})
 
     this.catchable = !props.distance_in_meters

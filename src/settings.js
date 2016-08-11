@@ -22,6 +22,8 @@ module.exports = {
 	RARE_POKEMON: ["Omanyte", "Kabuto", "Aerodactyl", "Lapras", "Snorlax", "Porygon",
 								 "Dratini", "Electabuzz", "Hitmonlee", "Hitmonchan",
 								 "Chansey", "Abra", "Machop", "Grimer", "Rhyhorn",
-							   "Lickitung", "Scyther", "Pinsir"]
+							   "Lickitung", "Scyther", "Pinsir"],
 
+  // (in ms.)
+  PAUSE_BETWEEN_REQUESTS: 1000
 }

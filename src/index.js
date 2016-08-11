@@ -4,9 +4,8 @@ import API from '~/API'
 import Item from '~/Item'
 import Pokemon from '~/Pokemon'
 import Fort from '~/Fort'
-import PlayerMap from '~/PlayerMap'
-import { BANNED_POKEMONS } from './settings'
-
+import {getCellIDs} from '~/Utils'
+import { PAUSE_BETWEEN_REQUESTS } from '~/settings'
 import rand from 'randgen'
 
 /**
@@ -23,7 +22,6 @@ class PokemonGOAPI {
   constructor(props) {
     this.player = new Player(this)
     this.api = new API(this)
-    this.map = new PlayerMap()
     this.logged = false
     this.debug = true
     this.useHeartBeat = false
@@ -32,6 +30,11 @@ class PokemonGOAPI {
     this.logging = (props && props.logging) != null
       ? props.logging
       : true // logging defaults to true
+    
+    this.requestInterval = (props && props.requestInterval) != null
+      ? props.requestInterval
+      : PAUSE_BETWEEN_REQUESTS // logging defaults to settings.js
+
   }
 
   get log() {
@@ -47,19 +50,20 @@ class PokemonGOAPI {
   /**
    * [login description]
    *
-   * @param  {[type]} username [description]
-   * @param  {[type]} password [description]
-   * @param  {[type]} provider [description]
-   * @return {[type]}          [description]
+   * @param  {[type]} username          [description]
+   * @param  {[type]} password          [description]
+   * @param  {[type]} provider          [description]
+   * @param  {[type]} forceRefreshLogin [description]
+   * @return {[type]}                   [description]
    */
-  async login(username, password, provider) {
+  async login(username, password, provider, forceRefreshLogin) {
     if (provider !== 'ptc' && provider !== 'google') {
       throw new Error('Invalid provider')
     }
 
     this.player.provider = provider
 
-    await this.player.Login(username, password)
+    await this.player.Login(username, password, forceRefreshLogin)
     await this.api.setEndpoint(this.player.playerInfo)
 
     return this
@@ -122,8 +126,8 @@ class PokemonGOAPI {
       } else if (data.item) {
         inventory.items[itemData[data.item.item_id]] = new Item(data.item, this)
       }
-      else if (data.pokemon_family) {
-        inventory.candies.push(new Item(data.pokemon_family, this))
+      else if (data.candy) {
+        inventory.candies.push(new Item(data.candy, this))
       }
     }
 
@@ -204,15 +208,15 @@ class PokemonGOAPI {
    * [GetMapObjects description]
    */
   async GetMapObjects() {
-    let callDiff = (this.lastObjectsCall+3000)-Date.now()
+    let callDiff = (this.lastObjectsCall + this.requestInterval)-Date.now()
     if (this.lastObjectsCall != 0 && callDiff > 0 ){
-      this.log.info('[!] We need 3 seconds wait between Map calls - waiting: '+ callDiff +'ms')
+      this.log.info(`[!] We need ${this.requestInterval} ms wait between GetMapObjects calls - waiting: ${callDiff} ms`)
       await new Promise(resolve => setTimeout(resolve, callDiff))
     }
 
 
-    let finalWalk = this.map.getNeighbors(this.player.playerInfo).sort()
-    let nullarray = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+    let finalWalk = getCellIDs(this.player.playerInfo.latitude, this.player.playerInfo.longitude).sort().slice(0,21)
+    let nullarray = Array(21).fill(0) 
     let res = await this.Call([{
       request: 'GET_MAP_OBJECTS',
       message: {
