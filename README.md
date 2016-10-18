@@ -1,6 +1,6 @@
 
 # Pokemon Go Bot
-Note: unfortunately, Niatanic added security features that broke the API this bot was built upon, so this bot no longer works.
+**Note: Unfortunately, Niatanic added security features that broke the API this bot was built upon, so this bot no longer works.**
 
 
 However, you can check out the bot code in `bots/robot.js`. You can try running the project with `npm run robot`.
