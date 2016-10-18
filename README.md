@@ -1,4 +1,13 @@
-# pokemongo-api ![](https://img.shields.io/npm/v/pokemongo-api.svg) [![npm](https://img.shields.io/npm/dt/pokemongo-api.svg)]() ![Travis](https://img.shields.io/travis/stoffern/pokemongo-api.svg) [![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/) [![Gitter](https://img.shields.io/gitter/room/nwjs/nw.js.svg?maxAge=2592000)](https://gitter.im/pokemongo-api/Lobby)
+
+# Pokemon Go Bot
+Note: unfortunately, Niatanic added security features that broke the API this bot was built upon, so this bot no longer works.
+
+
+However, you can check out the bot code in `bots/robot.js`. You can try running the project with `npm run robot`.
+
+Unfortunately bot account even got banned for this :(, but not before getting to level 23!
+
+# pokemon-go-api [![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
 
 Pokemon Go API for nodejs
 
