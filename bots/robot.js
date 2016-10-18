@@ -8,6 +8,7 @@ import {
 
 env(__dirname + '/.env');
 
+// used for multi-accouting
 var accntNum = process.argv[2]
 if (accntNum == 1 || accntNum == null)
 	accntNum = ""
@@ -26,6 +27,7 @@ var map = {
 						"UCHICAGO": {latitude: 41.7886119, longitude: -87.600902}
 					}
 
+// location can be chosen manually (random by default)
 var location = process.argv[3]
 if (location == null)
 	location = _.sample(Object.keys(map))

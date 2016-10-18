@@ -8,10 +8,10 @@
     "compile": "babel --presets es2015,stage-0 -d dist/ src/",
     "compile-example": "babel --presets es2015,stage-0 -d example-es5/ example/",
     "prepublish": "npm run compile",
-    "example": "babel-node scripts/example.js",
-		"test": "babel-node scripts/test.js",
-    "robot": "babel-node scripts/robot.js",
-    "robot2": "babel-node scripts/robot2.js"
+    "example": "babel-node bots/example.js",
+		"test": "babel-node bots/test.js",
+    "robot": "babel-node bots/robot.js",
+    "robot2": "babel-node bots/robot2.js"
   },
   "repository": {
     "type": "git",
