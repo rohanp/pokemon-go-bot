@@ -1,4 +1,9 @@
-# pokemongo-api [![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
+# Pokemon Go Bot
+Note: unfortunately, Niatanic added security features that broke the API this bot was built upon, so this bot no longer works.
+However, you can check out the bot code in `bots/robot.js`. You can try running the project with `npm run robot`. 
+
+
+# pokemon-go-api [![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
 
 Pokemon Go API for nodejs
 
